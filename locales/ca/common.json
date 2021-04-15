@@ -1,3 +1,5 @@
 {
-  "NO_CAMPAIGNS_FOUND": "No hi ha campanyes per aquest usuari"
+  "NO_CAMPAIGNS_FOUND": "No hi ha campanyes per aquest usuari",
+  "PREREPORT": "Preinforme",
+  "ATTACHMENTS_INFO": "Formats permesos (pdf, jpg, jpeg). Mida màxima permesa 5 MB."
 }

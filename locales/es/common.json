@@ -1,3 +1,5 @@
 {
-  "NO_CAMPAIGNS_FOUND": "No hemos encontrado campañas"
+  "NO_CAMPAIGNS_FOUND": "No hemos encontrado campañas",
+  "PREREPORT": "Preinforme",
+  "ATTACHMENTS_INFO": "Formatos permitidos (pdf, jpg, jpeg). Tamaño máximo 5 MB."
 }

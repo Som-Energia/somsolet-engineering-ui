@@ -1,11 +1,14 @@
 import { useState } from 'react'
+import useTranslation from 'next-translate/useTranslation'
 
 import Breadcrumbs from 'components/layout/Breadcrumbs'
 import StageRow from 'components/somsolet/StageRow'
+import ProjectTechnicalDetails from 'components/somsolet/ProjectTechnicalDetails'
 
 import { makeStyles } from '@material-ui/core/styles'
 
 import Box from '@material-ui/core/Box'
+import Button from '@material-ui/core/Button'
 import Collapse from '@material-ui/core/Collapse'
 import Container from '@material-ui/core/Container'
 import Chip from '@material-ui/core/Chip'
@@ -26,37 +29,42 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TablePagination from '@material-ui/core/TablePagination'
 import TableRow from '@material-ui/core/TableRow'
+import TextField from '@material-ui/core/TextField'
 
 import TimelineOutlinedIcon from '@material-ui/icons/TimelineOutlined'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 import PlaceOutlinedIcon from '@material-ui/icons/PlaceOutlined'
 import PowerOutlinedIcon from '@material-ui/icons/PowerOutlined'
-
 import WbSunnyOutlinedIcon from '@material-ui/icons/WbSunnyOutlined'
-
 import PhoneOutlinedIcon from '@material-ui/icons/PhoneOutlined'
 import MailOutlineIcon from '@material-ui/icons/MailOutline'
 import LanguageIcon from '@material-ui/icons/Language'
+import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined'
+import PermIdentityOutlinedIcon from '@material-ui/icons/PermIdentityOutlined'
+import FilterListIcon from '@material-ui/icons/FilterList'
+import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined'
 
-import { getProjects, getCCH } from '@/lib/project'
+import { getProjects, getCCH, getStages } from '@/lib/project'
 import { getCampaign } from '@/lib/campaign'
 
 export default function Campaign(props) {
   const classes = useStyles()
-  const { projects, campaign } = props
+  const { projects, campaign, stages } = props
+  const { t } = useTranslation()
 
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [showFilters, setShowFilters] = useState(false)
 
   const headers = [
-    '',
     'Installation',
     'Status',
     'Name',
     'CCH',
+    'Technical details',
     'Prereport',
-    'Date technical visit',
+    'Technical visit',
     'Report',
     'Offer',
     'Signature',
@@ -64,8 +72,7 @@ export default function Campaign(props) {
     'Installation',
     'Delivery certificate',
     'Legal registration',
-    'Legal certificate',
-    'Technical details'
+    'Legal certificate'
   ]
 
   const handleChangePage = (event, newPage) => {
@@ -77,6 +84,12 @@ export default function Campaign(props) {
     setPage(0)
   }
 
+  const toggleFilters = () => {
+    setShowFilters(!showFilters)
+  }
+
+  const applyFilters = () => {}
+
   return (
     <div className={classes.root}>
       <Container>
@@ -87,20 +100,82 @@ export default function Campaign(props) {
           </Heading>
           <Breadcrumbs />
         </div>
-        <Paper aria-label="filters" elevation={0} className={classes.filters}>
-          <FormControl className={classes.formControl}>
-            <InputLabel id="status-select-label">Status</InputLabel>
-            <Select
-              labelId="status-select-label"
-              id="status-select"
-              autoWidth
-              variant="outlined">
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
-        </Paper>
+        {showFilters && (
+          <Paper aria-label="filters" elevation={0} className={classes.filters}>
+            <Grid container spacing={3}>
+              <Grid item sm={2}>
+                <FormControl fullWidth size="small" variant="outlined">
+                  <InputLabel id="status-select-label">Status</InputLabel>
+                  <Select
+                    labelId="status-select-label"
+                    id="status-select"
+                    label="Status">
+                    {stages.map(({ stageId, stageName }) => (
+                      <MenuItem key={stageId} value={stageId}>
+                        {stageName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item sm={2}>
+                <FormControl fullWidth size="small" variant="outlined">
+                  <InputLabel id="warning-select-label">Warning</InputLabel>
+                  <Select
+                    labelId="warning-select-label"
+                    id="warning-select"
+                    label="Warning">
+                    <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item sm={3}>
+                <TextField
+                  label="Client"
+                  fullWidth
+                  size="small"
+                  variant="outlined"
+                  InputProps={{
+                    startAdornment: (
+                      <PermIdentityOutlinedIcon className={classes.input} />
+                    )
+                  }}
+                />
+              </Grid>
+              <Grid item sm={3}>
+                <TextField
+                  label="Municipi"
+                  fullWidth
+                  size="small"
+                  variant="outlined"
+                  InputProps={{
+                    startAdornment: (
+                      <PlaceOutlinedIcon className={classes.input} />
+                    )
+                  }}
+                />
+              </Grid>
+              <Grid
+                item
+                sm={2}
+                style={{
+                  textAlign: 'right',
+                  display: 'flex',
+                  'justify-content': 'space-between'
+                }}>
+                <Button color="inherit" variant="outlined">
+                  <SearchOutlinedIcon />
+                </Button>
+                <IconButton size="small">
+                  <GetAppOutlinedIcon />
+                </IconButton>
+              </Grid>
+            </Grid>
+          </Paper>
+        )}
+
         <TableContainer component={Paper} elevation={0}>
           <Table
             className={classes.table}
@@ -109,12 +184,17 @@ export default function Campaign(props) {
             aria-label="campanya detalls">
             <TableHead>
               <TableRow>
+                <TableCell align="center" className={classes.headerCell}>
+                  <IconButton size="small" onClick={toggleFilters}>
+                    <FilterListIcon />
+                  </IconButton>
+                </TableCell>
                 {headers.map((header, index) => (
                   <TableCell
                     key={index}
                     align={index > 0 ? 'center' : 'left'}
                     className={classes.headerCell}>
-                    {header}
+                    {t(header)}
                   </TableCell>
                 ))}
               </TableRow>
@@ -126,7 +206,7 @@ export default function Campaign(props) {
             </TableBody>
           </Table>
           <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPageOptions={[10, 25, 50]}
             component="div"
             count={projects.length}
             rowsPerPage={rowsPerPage}
@@ -162,7 +242,7 @@ const Row = (props) => {
           </IconButton>
         </TableCell>
         <TableCell>{description?.name}</TableCell>
-        <TableCell>
+        <TableCell align="center">
           <Chip
             size="small"
             variant="outlined"
@@ -184,14 +264,32 @@ const Row = (props) => {
             <TimelineOutlinedIcon />
           </IconButton>
         </TableCell>
-        <TableCell>
-          <StageRow {...stages?.prereport} />
+        <TableCell align="center">
+          <ProjectTechnicalDetails />
         </TableCell>
-        <TableCell>
-          <StageRow {...stages?.technicalVisit} />
+        <TableCell align="center">
+          <StageRow
+            id="prereport"
+            project={description?.name}
+            client={description?.registeredPerson?.name}
+            {...stages?.prereport}
+          />
         </TableCell>
-        <TableCell>
-          <StageRow {...stages?.report} />
+        <TableCell align="center">
+          <StageRow
+            id="technicalVisit"
+            project={description?.name}
+            client={description?.registeredPerson?.name}
+            {...stages?.technicalVisit}
+          />
+        </TableCell>
+        <TableCell align="center">
+          <StageRow
+            id="report"
+            project={description?.name}
+            client={description?.registeredPerson?.name}
+            {...stages?.report}
+          />
         </TableCell>
         <TableCell>
           <StageRow {...stages?.offer} />
@@ -214,7 +312,6 @@ const Row = (props) => {
         <TableCell>
           <StageRow {...stages?.legalization} />
         </TableCell>
-        <TableCell></TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={3}>
@@ -296,6 +393,9 @@ const useStyles = makeStyles((theme) => ({
     padding: '16px 24px',
     marginBottom: '24px'
   },
+  formControl: {
+    minWidth: 120
+  },
   headerCell: {
     whiteSpace: 'nowrap'
   },
@@ -312,6 +412,14 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       color: theme.palette.primary.main
     }
+  },
+  input: {
+    '& input': {
+      color: 'rgba(0, 0, 0, 0.54)'
+    },
+    '& path': {
+      color: 'rgba(0, 0, 0, 0.54)'
+    }
   }
 }))
 
@@ -319,12 +427,15 @@ export async function getServerSideProps(context) {
   const { campaignId } = context.query
 
   const projectsResponse = await getProjects(campaignId)
-  const projects = projectsResponse?.data ? projectsResponse.data : []
+  const projects = projectsResponse?.data || []
 
   const campaignResponse = await getCampaign(campaignId)
-  const campaign = campaignResponse?.data ? campaignResponse.data : []
+  const campaign = campaignResponse.data || []
+
+  const stageResponse = await getStages()
+  const stages = stageResponse?.data || []
 
   return {
-    props: { projects, campaign } // will be passed to the page component as props
+    props: { projects, campaign, stages } // will be passed to the page component as props
   }
 }
