@@ -9,6 +9,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
+import Checkbox from '@material-ui/core/Checkbox'
 import Collapse from '@material-ui/core/Collapse'
 import Container from '@material-ui/core/Container'
 import Chip from '@material-ui/core/Chip'
@@ -223,6 +224,7 @@ export default function Campaign(props) {
 const Row = (props) => {
   const { description, warnings, stages } = props
   const classes = useStyles()
+  const [selected, setSelected] = useState(false)
   const [open, setOpen] = useState(false)
 
   const handleCCH = async (projectId) => {
@@ -234,12 +236,10 @@ const Row = (props) => {
     <>
       <TableRow className={classes.cell}>
         <TableCell>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}>
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
+          <Checkbox
+            checked={selected}
+            onChange={() => setSelected(!selected)}
+          />
         </TableCell>
         <TableCell>{description?.name}</TableCell>
         <TableCell align="center">
@@ -265,7 +265,7 @@ const Row = (props) => {
           </IconButton>
         </TableCell>
         <TableCell align="center">
-          <ProjectTechnicalDetails />
+          <ProjectTechnicalDetails {...description} />
         </TableCell>
         <TableCell align="center">
           <StageRow
