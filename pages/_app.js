@@ -9,6 +9,8 @@ import theme from '@/styles/theme'
 import Header from 'components/layout/Header'
 import Footer from 'components/layout/Footer'
 
+import CampaignContext from 'context/campaign'
+
 export default function MyApp(props) {
   const { Component, pageProps } = props
   const classes = useStyles()
@@ -30,17 +32,18 @@ export default function MyApp(props) {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-
-        <div className={classes.root}>
-          <Header />
-          <main className={classes.main}>
-            <Component {...pageProps} />
-          </main>
-          <Footer />
-        </div>
-      </ThemeProvider>
+      <CampaignContext.Provider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <div className={classes.root}>
+            <Header />
+            <main className={classes.main}>
+              <Component {...pageProps} />
+            </main>
+            <Footer />
+          </div>
+        </ThemeProvider>
+      </CampaignContext.Provider>
     </>
   )
 }

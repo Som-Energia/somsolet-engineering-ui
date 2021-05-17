@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 
 import Breadcrumbs from 'components/layout/Breadcrumbs'
@@ -46,6 +46,8 @@ import PermIdentityOutlinedIcon from '@material-ui/icons/PermIdentityOutlined'
 import FilterListIcon from '@material-ui/icons/FilterList'
 import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined'
 
+import CampaignContext from 'context/campaign'
+
 import { getProjects, getCCH, getStages } from '@/lib/project'
 import { getCampaign } from '@/lib/campaign'
 
@@ -57,6 +59,9 @@ export default function Campaign(props) {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [showFilters, setShowFilters] = useState(false)
+
+  const context = useContext(CampaignContext)
+  console.log(context)
 
   const headers = [
     'Installation',
