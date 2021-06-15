@@ -22,6 +22,9 @@ const theme = createMuiTheme({
     typography: {
       htmlFontSize: 16
     }
+  },
+  shape: {
+    borderRadius: 4
   }
 })
 

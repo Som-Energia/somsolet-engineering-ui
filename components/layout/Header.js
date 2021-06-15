@@ -13,6 +13,8 @@ import PersonIcon from '@material-ui/icons/PersonOutlineOutlined'
 
 import Link from 'next/link'
 
+require('typeface-montserrat')
+
 const Header = () => {
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState(null)
@@ -48,7 +50,7 @@ const Header = () => {
             aria-haspopup="true"
             onClick={handleMenu}
             color="inherit">
-            <AccountCircle fontSize="large" />
+            <AccountCircle color="secondary" fontSize="large" />
           </IconButton>
           <Menu
             id="menu-appbar"
@@ -90,9 +92,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     '& h3': {
+      fontFamily: 'Montserrat',
       textTransform: 'uppercase',
-      fontSize: '17px',
-      fontWeight: 400
+      fontSize: '18px',
+      fontWeight: 600
     },
     '& img': {
       maxWidth: '60px',

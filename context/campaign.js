@@ -1,14 +1,18 @@
-import { createContext } from 'react'
+import { createContext, useState } from 'react'
 
 const CampaignContext = createContext({
   selectedProjects: [],
   setSelectedProject: () => {}
 })
 
-export function CampaignContextProvider ({children}){
-  const selectedProjects = []
+export function CampaignContextProvider(props) {
+  const [selectedProjects, setSelectedProject] = useState([])
 
-  return <Context.Provider value={selectedProject}>{children}</Context.Provider>
+  return (
+    <CampaignContext.Provider value={{ selectedProjects, setSelectedProject }}>
+      {props.children}
+    </CampaignContext.Provider>
+  )
 }
 
 export default CampaignContext

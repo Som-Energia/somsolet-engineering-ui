@@ -1,15 +1,28 @@
 import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
 import Head from 'next/head'
 import CssBaseline from '@material-ui/core/CssBaseline'
+
+import ProgressBar from '@badrap/bar-of-progress'
+import Router from 'next/router'
 
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles'
 import theme from '@/styles/theme'
 
+import { CampaignContextProvider } from 'context/campaign'
+
 import Header from 'components/layout/Header'
 import Footer from 'components/layout/Footer'
 
-import CampaignContext from 'context/campaign'
+const progress = new ProgressBar({
+  size: 2,
+  color: theme.palette.primary.main,
+  className: 'progress-bar',
+  delay: 100
+})
+
+Router.events.on('routeChangeStart', progress.start)
+Router.events.on('routeChangeComplete', progress.finish)
+Router.events.on('routeChangeError', progress.finish)
 
 export default function MyApp(props) {
   const { Component, pageProps } = props
@@ -32,9 +45,9 @@ export default function MyApp(props) {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-      <CampaignContext.Provider>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <CampaignContextProvider>
           <div className={classes.root}>
             <Header />
             <main className={classes.main}>
@@ -42,8 +55,8 @@ export default function MyApp(props) {
             </main>
             <Footer />
           </div>
-        </ThemeProvider>
-      </CampaignContext.Provider>
+        </CampaignContextProvider>
+      </ThemeProvider>
     </>
   )
 }

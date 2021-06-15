@@ -1,5 +1,7 @@
 import { useState, useContext } from 'react'
 import useTranslation from 'next-translate/useTranslation'
+import { CSVLink } from 'react-csv'
+import * as dayjs from 'dayjs'
 
 import Breadcrumbs from 'components/layout/Breadcrumbs'
 import StageRow from 'components/somsolet/StageRow'
@@ -33,8 +35,6 @@ import TableRow from '@material-ui/core/TableRow'
 import TextField from '@material-ui/core/TextField'
 
 import TimelineOutlinedIcon from '@material-ui/icons/TimelineOutlined'
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 import PlaceOutlinedIcon from '@material-ui/icons/PlaceOutlined'
 import PowerOutlinedIcon from '@material-ui/icons/PowerOutlined'
 import WbSunnyOutlinedIcon from '@material-ui/icons/WbSunnyOutlined'
@@ -48,7 +48,12 @@ import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined'
 
 import CampaignContext from 'context/campaign'
 
-import { getProjects, getCCH, getStages } from '@/lib/project'
+import {
+  getProjects,
+  getCCH,
+  getStages,
+  getSelectedTechnicalDetails
+} from '@/lib/project'
 import { getCampaign } from '@/lib/campaign'
 
 export default function Campaign(props) {
@@ -59,9 +64,9 @@ export default function Campaign(props) {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [showFilters, setShowFilters] = useState(false)
+  const [csvData, setCsvData] = useState([])
 
-  const context = useContext(CampaignContext)
-  console.log(context)
+  const { selectedProjects } = useContext(CampaignContext)
 
   const headers = [
     'Installation',
@@ -94,135 +99,165 @@ export default function Campaign(props) {
     setShowFilters(!showFilters)
   }
 
-  const applyFilters = () => {}
+  const applyFilters = () => {
+    console.log('apply filters!')
+  }
+
+  const handleDownload = async (event, done) => {
+    const details = await getSelectedTechnicalDetails(selectedProjects)
+    console.log(selectedProjects.length)
+    if (selectedProjects?.length > 0) {
+      setCsvData(details)
+      done()
+    } else {
+      done(false)
+      setCsvData([])
+    }
+  }
 
   return (
-    <div className={classes.root}>
-      <Container>
-        <div className={classes.top}>
-          <Heading>
-            <WbSunnyOutlinedIcon fontSize="large" />
-            &nbsp;{`${campaign?.name}`}
-          </Heading>
-          <Breadcrumbs />
-        </div>
-        {showFilters && (
-          <Paper aria-label="filters" elevation={0} className={classes.filters}>
-            <Grid container spacing={3}>
-              <Grid item sm={2}>
-                <FormControl fullWidth size="small" variant="outlined">
-                  <InputLabel id="status-select-label">Status</InputLabel>
-                  <Select
-                    labelId="status-select-label"
-                    id="status-select"
-                    label="Status">
-                    {stages.map(({ stageId, stageName }) => (
-                      <MenuItem key={stageId} value={stageId}>
-                        {stageName}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+    <>
+      <div className={classes.root}>
+        <Container>
+          <div className={classes.top}>
+            <Heading>
+              <WbSunnyOutlinedIcon fontSize="large" />
+              &nbsp;{`${campaign?.name}`}
+            </Heading>
+            <Breadcrumbs />
+          </div>
+          {showFilters && (
+            <Paper
+              aria-label="filters"
+              elevation={0}
+              className={classes.filters}>
+              <Grid container spacing={3}>
+                <Grid item sm={2}>
+                  <FormControl fullWidth size="small" variant="outlined">
+                    <InputLabel id="status-select-label">Status</InputLabel>
+                    <Select
+                      labelId="status-select-label"
+                      id="status-select"
+                      label="Status">
+                      {stages.map(({ stageId, stageName }) => (
+                        <MenuItem key={stageId} value={stageId}>
+                          {stageName}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item sm={2}>
+                  <FormControl fullWidth size="small" variant="outlined">
+                    <InputLabel id="warning-select-label">Warning</InputLabel>
+                    <Select
+                      labelId="warning-select-label"
+                      id="warning-select"
+                      label="Warning">
+                      <MenuItem value={10}>Ten</MenuItem>
+                      <MenuItem value={20}>Twenty</MenuItem>
+                      <MenuItem value={30}>Thirty</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item sm={3}>
+                  <TextField
+                    label="Client"
+                    fullWidth
+                    size="small"
+                    variant="outlined"
+                    InputProps={{
+                      startAdornment: (
+                        <PermIdentityOutlinedIcon className={classes.input} />
+                      )
+                    }}
+                  />
+                </Grid>
+                <Grid item sm={3}>
+                  <TextField
+                    label="Municipi"
+                    fullWidth
+                    size="small"
+                    variant="outlined"
+                    InputProps={{
+                      startAdornment: (
+                        <PlaceOutlinedIcon className={classes.input} />
+                      )
+                    }}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  sm={2}
+                  style={{
+                    textAlign: 'right',
+                    display: 'flex',
+                    'justify-content': 'space-between'
+                  }}>
+                  <Button color="primary" variant="contained" disableElevation>
+                    <SearchOutlinedIcon />
+                  </Button>
+                  <CSVLink
+                    data={csvData}
+                    asyncOnClick={true}
+                    filename={`${campaign.name} - ${dayjs().format(
+                      'YYYYMMDDHHmmss'
+                    )}.csv`}
+                    onClick={handleDownload}>
+                    <Button
+                      color="secondary"
+                      variant="contained"
+                      disabled={!selectedProjects.length}>
+                      <GetAppOutlinedIcon />
+                    </Button>
+                  </CSVLink>
+                </Grid>
               </Grid>
-              <Grid item sm={2}>
-                <FormControl fullWidth size="small" variant="outlined">
-                  <InputLabel id="warning-select-label">Warning</InputLabel>
-                  <Select
-                    labelId="warning-select-label"
-                    id="warning-select"
-                    label="Warning">
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item sm={3}>
-                <TextField
-                  label="Client"
-                  fullWidth
-                  size="small"
-                  variant="outlined"
-                  InputProps={{
-                    startAdornment: (
-                      <PermIdentityOutlinedIcon className={classes.input} />
-                    )
-                  }}
-                />
-              </Grid>
-              <Grid item sm={3}>
-                <TextField
-                  label="Municipi"
-                  fullWidth
-                  size="small"
-                  variant="outlined"
-                  InputProps={{
-                    startAdornment: (
-                      <PlaceOutlinedIcon className={classes.input} />
-                    )
-                  }}
-                />
-              </Grid>
-              <Grid
-                item
-                sm={2}
-                style={{
-                  textAlign: 'right',
-                  display: 'flex',
-                  'justify-content': 'space-between'
-                }}>
-                <Button color="inherit" variant="outlined">
-                  <SearchOutlinedIcon />
-                </Button>
-                <IconButton size="small">
-                  <GetAppOutlinedIcon />
-                </IconButton>
-              </Grid>
-            </Grid>
-          </Paper>
-        )}
+            </Paper>
+          )}
 
-        <TableContainer component={Paper} elevation={0}>
-          <Table
-            className={classes.table}
-            aria-labelledby="tableTitle"
-            size="medium"
-            aria-label="campanya detalls">
-            <TableHead>
-              <TableRow>
-                <TableCell align="center" className={classes.headerCell}>
-                  <IconButton size="small" onClick={toggleFilters}>
-                    <FilterListIcon />
-                  </IconButton>
-                </TableCell>
-                {headers.map((header, index) => (
-                  <TableCell
-                    key={index}
-                    align={index > 0 ? 'center' : 'left'}
-                    className={classes.headerCell}>
-                    {t(header)}
+          <TableContainer component={Paper} elevation={0}>
+            <Table
+              className={classes.table}
+              aria-labelledby="tableTitle"
+              size="medium"
+              aria-label="campanya detalls">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center" className={classes.headerCell}>
+                    <IconButton size="small" onClick={toggleFilters}>
+                      <FilterListIcon />
+                    </IconButton>
                   </TableCell>
+                  {headers.map((header, index) => (
+                    <TableCell
+                      key={index}
+                      align={index > 0 ? 'center' : 'left'}
+                      className={classes.headerCell}>
+                      {t(header)}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {projects.map((project, index) => (
+                  <Row key={index} {...project} />
                 ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {projects.map((project, index) => (
-                <Row key={index} {...project} />
-              ))}
-            </TableBody>
-          </Table>
-          <TablePagination
-            rowsPerPageOptions={[10, 25, 50]}
-            component="div"
-            count={projects.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
-          />
-        </TableContainer>
-      </Container>
-    </div>
+              </TableBody>
+            </Table>
+            <TablePagination
+              rowsPerPageOptions={[10, 25, 50]}
+              component="div"
+              count={projects.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onChangePage={handleChangePage}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
+            />
+          </TableContainer>
+        </Container>
+      </div>
+    </>
   )
 }
 
@@ -232,19 +267,30 @@ const Row = (props) => {
   const [selected, setSelected] = useState(false)
   const [open, setOpen] = useState(false)
 
+  const { selectedProjects, setSelectedProject } = useContext(CampaignContext)
+
   const handleCCH = async (projectId) => {
     const cch = await getCCH(projectId)
     console.log(cch)
+  }
+
+  const handleCheck = (event) => {
+    let updatedSelection = [...selectedProjects, description]
+    if (selected) {
+      updatedSelection = updatedSelection.filter(
+        (item) => item.name !== description.name
+      )
+    }
+
+    setSelectedProject(updatedSelection)
+    setSelected(!selected)
   }
 
   return (
     <>
       <TableRow className={classes.cell}>
         <TableCell>
-          <Checkbox
-            checked={selected}
-            onChange={() => setSelected(!selected)}
-          />
+          <Checkbox checked={selected} onChange={handleCheck} />
         </TableCell>
         <TableCell>{description?.name}</TableCell>
         <TableCell align="center">
@@ -395,14 +441,15 @@ const useStyles = makeStyles((theme) => ({
   filters: {
     display: 'flex',
     alignItems: 'center',
-    padding: '16px 24px',
-    marginBottom: '24px'
+    padding: '20px 20px',
+    marginBottom: '16px'
   },
   formControl: {
     minWidth: 120
   },
   headerCell: {
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
+    textTransform: 'uppercase'
   },
   cell: {
     whiteSpace: 'nowrap',

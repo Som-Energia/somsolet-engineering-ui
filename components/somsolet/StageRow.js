@@ -106,7 +106,7 @@ const StageRow = (props) => {
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description">
         <DialogTitle className={classes.dialogTitle}>
-          <FileIcon /> &nbsp;{t(`${id}`.toUpperCase())}
+          <FileIcon /> &nbsp;{`${id}`.toUpperCase()}
         </DialogTitle>
         <DialogContent style={{ paddingTop: '16px' }}>
           <Grid container spacing={4}>
@@ -116,7 +116,7 @@ const StageRow = (props) => {
                 fullWidth
                 variant="outlined"
                 size="small"
-                value={project}
+                value={project || ''}
                 disabled
               />
             </Grid>
@@ -126,7 +126,7 @@ const StageRow = (props) => {
                 fullWidth
                 variant="outlined"
                 size="small"
-                value={client}
+                value={client || ''}
                 disabled
                 InputProps={{
                   startAdornment: <PermIdentityOutlinedIcon fontSize="small" />
@@ -139,7 +139,7 @@ const StageRow = (props) => {
                 fullWidth
                 variant="outlined"
                 size="small"
-                value={date}
+                value={date || ''}
                 disabled
                 InputProps={{
                   startAdornment: <CalendarTodayIcon fontSize="small" />
@@ -152,7 +152,7 @@ const StageRow = (props) => {
                 <>
                   <FormControl component="fieldset">
                     <FormLabel component="legend">
-                      Estat del {t(`${id}`.toUpperCase())}
+                      Estat del {`${id}`.toUpperCase()}
                     </FormLabel>
 
                     <Typography component="div">
@@ -186,7 +186,7 @@ const StageRow = (props) => {
             </Grid>
             <Grid item xs={12}>
               <FormLabel component="legend" style={{ marginBottom: '10px' }}>
-                {t(`${id}`.toUpperCase())} enviat
+                {`${id}`.toUpperCase()} enviat
               </FormLabel>
               <Uploader
                 fieldError={attachmentErrors}

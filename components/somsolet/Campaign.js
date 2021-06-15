@@ -106,6 +106,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center'
   },
   title: {
+    fontFamily: 'Montserrat',
+    fontWeight: 500,
     minHeight: '64px'
   }
 }))

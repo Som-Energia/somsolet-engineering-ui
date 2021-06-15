@@ -28,7 +28,6 @@ import LanguageIcon from '@material-ui/icons/Language'
 import PowerOutlinedIcon from '@material-ui/icons/PowerOutlined'
 import FileIcon from '@material-ui/icons/DescriptionOutlined'
 
-
 import { getTechnicalDetails } from '@/lib/project'
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -37,66 +36,94 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 const Field = (props) => {
   const { name, label, type, data, loading, handleChange } = props
-  if (type === 'divider'){
+  if (type === 'divider') {
     return <Divider />
   }
 
-  if (type === 'boolean'){
-    return <FormControlLabel
-      control={ <Switch
-        checked={data?.[name]}
-        color="primary"
-        onChange={handleChange}
-        name={name}
-        inputProps={{ 'aria-label': label }}
-      /> }
-    label={label}
-    />
+  if (type === 'boolean') {
+    return (
+      <FormControlLabel
+        control={
+          <Switch
+            checked={data?.[name]}
+            color="primary"
+            onChange={handleChange}
+            name={name}
+            inputProps={{ 'aria-label': label }}
+          />
+        }
+        label={label}
+      />
+    )
   } else if (type === 'textarea') {
-    return <TextField
-      label={label}
-      name={name}
-      multiline
-      rows={4}
-      value={data?.[name]}
-      InputLabelProps={{ shrink: !!data?.[name] }}
-      disabled={loading}
-      fullWidth
-      variant="outlined"
-      onChange={handleChange}
-    />
-
+    return (
+      <TextField
+        label={label}
+        name={name}
+        multiline
+        rows={4}
+        value={data?.[name]}
+        InputLabelProps={{ shrink: !!data?.[name] }}
+        disabled={loading}
+        fullWidth
+        variant="outlined"
+        onChange={handleChange}
+      />
+    )
   } else {
-    return <TextField
-      label={label}
-      name={name}
-      size="small"
-      variant="outlined"
-      fullWidth
-      InputLabelProps={{ shrink: data?.[name] !== "" && data?.[name] !== null }}
-      disabled={loading}
-      value={data?.[name] || ""}
-      onChange={handleChange}
-    />
+    return (
+      <TextField
+        label={label}
+        name={name}
+        size="small"
+        variant="outlined"
+        fullWidth
+        InputLabelProps={{
+          shrink: data?.[name] !== '' && data?.[name] !== null
+        }}
+        disabled={loading}
+        value={data?.[name] || ''}
+        onChange={handleChange}
+      />
+    )
   }
-
 }
 
 const fields = [
   { name: 'roof_orientation', label: 'Orientació coberta', type: undefined },
   { name: 'solar_modules_angle', label: 'Orientació coberta', type: undefined },
-  { name: 'installation_power', label: 'Potència instal·lada (kWp)', type: undefined },
+  {
+    name: 'installation_power',
+    label: 'Potència instal·lada (kWp)',
+    type: undefined
+  },
   { name: 'power', label: 'Potència contractada', type: undefined },
-  { name: 'tariff', label: 'Tarifa d\'accès', type: undefined },
+  { name: 'tariff', label: "Tarifa d'accès", type: undefined },
   { name: 'anual_consumption', label: 'Consum anual (kWh)', type: undefined },
   { name: 'client_comments', label: 'Comentaris client', type: 'textarea' },
-  { name: 'engineering_comments', label: 'Comentaris enginyeria', type: 'textarea' },
+  {
+    name: 'engineering_comments',
+    label: 'Comentaris enginyeria',
+    type: 'textarea'
+  },
   { name: 'voltage', label: 'Tensió', type: undefined },
   { name: 'count_panels', label: 'Num. de panells', type: undefined },
   { name: 'installation_model', label: 'Model instal·lació', type: undefined },
-  { name: 'installation_singlephase_model', label: 'Model instal·lació monofàsic', type: undefined },
-  { name: 'installation_threephase_model', label: 'Model instal·lació trifàsic', type: undefined },
-  { name: 'count_shadow_optimizer', label: 'Num. optimitzador de sombres', type: undefined },
+  {
+    name: 'installation_singlephase_model',
+    label: 'Model instal·lació monofàsic',
+    type: undefined
+  },
+  {
+    name: 'installation_threephase_model',
+    label: 'Model instal·lació trifàsic',
+    type: undefined
+  },
+  {
+    name: 'count_shadow_optimizer',
+    label: 'Num. optimitzador de sombres',
+    type: undefined
+  },
   { name: 'homemanager', label: 'Homemanager', type: 'boolean' },
   { name: 'power_meter', label: 'Power meter', type: 'boolean' },
   { name: 'acquire_interest', label: 'Acquire interest', type: undefined },
@@ -107,28 +134,84 @@ const fields = [
   { name: 'bateries_capacity', label: 'Capacitat bateries', type: undefined },
   { name: 'bateries_price', label: 'Preu bateries', type: undefined },
   { type: 'divider' },
-  { name: 'shadow_optimizer', label: 'Optimitzador de sombres', type: 'boolean' },
-  { name: 'shadow_optimizer_brand', label: 'Marca optimitzador d\'ombres', type: undefined },
-  { name: 'shadow_optimizer_model', label: 'Model optimitzador d\'ombres', type: undefined },
-  { name: 'shadow_optimizer_price', label: 'Preu optimitzador d\'ombres', type: undefined },
-  { name: 'peak_power_panels_wp', label: 'Peak Power Panels WP', type: undefined },
+  {
+    name: 'shadow_optimizer',
+    label: 'Optimitzador de sombres',
+    type: 'boolean'
+  },
+  {
+    name: 'shadow_optimizer_brand',
+    label: "Marca optimitzador d'ombres",
+    type: undefined
+  },
+  {
+    name: 'shadow_optimizer_model',
+    label: "Model optimitzador d'ombres",
+    type: undefined
+  },
+  {
+    name: 'shadow_optimizer_price',
+    label: "Preu optimitzador d'ombres",
+    type: undefined
+  },
+  {
+    name: 'peak_power_panels_wp',
+    label: 'Peak Power Panels WP',
+    type: undefined
+  },
   { name: 'panel_brand', label: 'Marca panell', type: undefined },
   { name: 'panel_type', label: 'Tipus panell', type: undefined },
   { name: 'panel_model', label: 'Model panell', type: undefined },
   { name: 'inversor_brand', label: 'Marca inversor', type: undefined },
   { name: 'inversor_model', label: 'Model inversor', type: undefined },
-  { name: 'nominal_inversor_power', label: 'Inversor de potència nominal', type: undefined },
+  {
+    name: 'nominal_inversor_power',
+    label: 'Inversor de potència nominal',
+    type: undefined
+  },
   { name: 'charger_manager', label: 'Cargador manager', type: 'boolean' },
-  { name: 'charger_manager_brand', label: 'Marca cargador manager', type: undefined },
-  { name: 'charger_manager_model', label: 'Model cargador manager', type: undefined },
-  { name: 'charger_manager_price', label: 'Preu cargador manager', type: undefined },
+  {
+    name: 'charger_manager_brand',
+    label: 'Marca cargador manager',
+    type: undefined
+  },
+  {
+    name: 'charger_manager_model',
+    label: 'Model cargador manager',
+    type: undefined
+  },
+  {
+    name: 'charger_manager_price',
+    label: 'Preu cargador manager',
+    type: undefined
+  },
   { type: 'divider' },
   { name: 'electric_car', label: 'Cotxe elèctric', type: 'boolean' },
-  { name: 'electric_car_charger', label: 'Cotxe elèctric manager', type: 'boolean' },
-  { name: 'electric_car_charger_brand', label: 'Marca cargador cotxe', type: undefined },
-  { name: 'electric_car_charger_model', label: 'Model cargador cotxe', type: undefined },
-  { name: 'electric_car_charger_power', label: 'Potència cargador cotxe', type: undefined },
-  { name: 'electric_car_charger_price', label: 'Preu cargador cotxe', type: undefined },
+  {
+    name: 'electric_car_charger',
+    label: 'Cotxe elèctric manager',
+    type: 'boolean'
+  },
+  {
+    name: 'electric_car_charger_brand',
+    label: 'Marca cargador cotxe',
+    type: undefined
+  },
+  {
+    name: 'electric_car_charger_model',
+    label: 'Model cargador cotxe',
+    type: undefined
+  },
+  {
+    name: 'electric_car_charger_power',
+    label: 'Potència cargador cotxe',
+    type: undefined
+  },
+  {
+    name: 'electric_car_charger_price',
+    label: 'Preu cargador cotxe',
+    type: undefined
+  }
 ]
 
 const ProjectTechnicalDetails = (props) => {
@@ -137,20 +220,19 @@ const ProjectTechnicalDetails = (props) => {
   const { projectId } = props
 
   const [open, setOpen] = useState(false)
-
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState(props)
 
   useEffect(() => {
-    if(open){
+    if (open) {
       setLoading(true)
       getTechnicalDetails(projectId)
         .then((response) => {
           const technicalDetails = response.data?.[0]
-          setData({...data, ...technicalDetails})
+          setData({ ...data, ...technicalDetails })
           setLoading(false)
         })
-        .catch(error => console.log(error))
+        .catch((error) => console.log(error))
     }
   }, [open])
 
@@ -166,7 +248,7 @@ const ProjectTechnicalDetails = (props) => {
     const nameValue = {}
     nameValue[event.target.name] = event.target.value
     console.log(nameValue)
-    setData({...data, ...nameValue})
+    setData({ ...data, ...nameValue })
     console.log(data)
   }
 
@@ -189,7 +271,7 @@ const ProjectTechnicalDetails = (props) => {
           &nbsp;{'Technical Details'}
         </DialogTitle>
         <DialogContent>
-          <Grid container spacing={3}>
+          <Grid container spacing={4}>
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Installation"
@@ -241,7 +323,6 @@ const ProjectTechnicalDetails = (props) => {
                 }}
                 value={data?.registeredPerson?.email}
                 disabled
-
               />
             </Grid>
             <Grid item xs={12} sm={3}>
@@ -362,13 +443,24 @@ const ProjectTechnicalDetails = (props) => {
                 value={data?.cups}
               />
             </Grid>
-            {
-              fields.map((field, index) => (
-                <Grid key={index} item xs={12} sm={ field?.type === 'textarea' || field.type === 'divider' ? 12 : 4}>
-                  <Field {...field} data={data} loading={loading} handleChange={handleChange} />
-                </Grid>
-              ))
-            }
+            {fields.map((field, index) => (
+              <Grid
+                key={index}
+                item
+                xs={12}
+                sm={
+                  field?.type === 'textarea' || field.type === 'divider'
+                    ? 12
+                    : 4
+                }>
+                <Field
+                  {...field}
+                  data={data}
+                  loading={loading}
+                  handleChange={handleChange}
+                />
+              </Grid>
+            ))}
             <Grid item xs={12}>
               <Divider />
             </Grid>

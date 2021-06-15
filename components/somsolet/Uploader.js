@@ -133,22 +133,24 @@ const Uploader = (props) => {
       />
       <List>
         {uploads.map((upload, index) => (
-          <ListItem key={upload}>
-            <ListItemIcon>
-              <FileIcon />
-            </ListItemIcon>
-            <ListItemText>
-              <Link href="#">{upload}</Link>
-            </ListItemText>
-            <ListItemSecondaryAction>
-              <IconButton
-                edge="end"
-                aria-label="delete"
-                onClick={(event) => handleDelete(event, index)}>
-                <DeleteIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
+          <div key={index}>
+            <ListItem>
+              <ListItemIcon>
+                <FileIcon />
+              </ListItemIcon>
+              <ListItemText>
+                {upload !== undefined && <Link href="#">{upload}</Link>}
+              </ListItemText>
+              <ListItemSecondaryAction>
+                <IconButton
+                  edge="end"
+                  aria-label="delete"
+                  onClick={(event) => handleDelete(event, index)}>
+                  <DeleteIcon />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
+          </div>
         ))}
       </List>
     </>
