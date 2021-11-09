@@ -8,7 +8,8 @@ const Footer = () => {
     <footer className={classes.root}>
       <Container>
         <div className={classes.madeText}>
-          Made with&nbsp;<span>💚</span>&nbsp;&nbsp;by Som Energia
+          Som Energia © {new Date().getFullYear()} | Made with 💚 and open
+          source
         </div>
       </Container>
     </footer>
