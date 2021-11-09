@@ -20,8 +20,6 @@ const Campaign = (props) => {
   const classes = useStyles()
   const router = useRouter()
 
-  console.log(props)
-
   const handleScheduleClick = (event) => {
     event.preventDefault()
     router.push(`/schedule/${campaignId}`)
@@ -38,7 +36,7 @@ const Campaign = (props) => {
         <div className={classes.details}>
           <CardContent className={classes.content}>
             <Typography variant="subtitle1" color="textSecondary">
-              {`Campanya #${campaignId}`}
+              {`#${campaignId}`}
             </Typography>
             <Link href={`/campaign/${campaignId}`} passHref>
               <MuiLink color="inherit">

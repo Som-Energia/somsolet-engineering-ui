@@ -1,33 +1,24 @@
-import { makeStyles } from '@material-ui/core/styles'
 import useTranslation from 'next-translate/useTranslation'
 
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 import Campaign from '@/components/somsolet/Campaign'
+import Heading from '@/components/layout/Heading'
 
 import Alert from 'components/layout/Alert'
 
 import { getCampaigns } from '@/lib/campaign'
 
-const useStyles = makeStyles({
-  root: {
-    paddingTop: '32px'
-  },
-  table: {
-    minWidth: 650
-  }
-})
-
 export default function Home({ campaigns = [] }) {
-  const classes = useStyles()
   const { t } = useTranslation('common')
   return (
-    <div className={classes.root}>
+    <div>
       <Container>
+        <Heading>Les meves campanyes</Heading>
         {!campaigns.length && <Alert>{t('NO_CAMPAIGNS_FOUND')}</Alert>}
         <Grid container spacing={3}>
           {campaigns.map((campaign) => (
-            <Grid key={campaign.id} item xs={3}>
+            <Grid key={campaign.id} item xs={4}>
               <Campaign {...campaign} />
             </Grid>
           ))}

@@ -1,5 +1,6 @@
-import { Container, Typography } from '@material-ui/core'
 import { useRouter } from 'next/router'
+import { Container } from '@material-ui/core'
+import Heading from '@/components/layout/Heading'
 
 export default function Campaign() {
   const router = useRouter()
@@ -7,7 +8,7 @@ export default function Campaign() {
   return (
     <div>
       <Container>
-        <Typography variant="h3">{`Detalls tècnics #${campaignId}`}</Typography>
+        <Heading>{`Detalls tècnics #${campaignId}`}</Heading>
       </Container>
     </div>
   )
