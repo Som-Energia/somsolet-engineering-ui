@@ -2,41 +2,30 @@ import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 
 import useTranslation from 'next-translate/useTranslation'
-import { makeStyles } from '@material-ui/core/styles'
 
-import CircularProgress from '@material-ui/core/CircularProgress'
-import IconButton from '@material-ui/core/IconButton'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import TextField from '@material-ui/core/TextField'
-import Link from '@material-ui/core/Link'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
-import ListItemText from '@material-ui/core/ListItemText'
+import {
+  CircularProgress,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Link,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemSecondaryAction,
+  ListItemText
+} from '@mui/material'
 
-import PublishIcon from '@material-ui/icons/Publish'
-import HighlightOffIcon from '@material-ui/icons/HighlightOff'
-import FileIcon from '@material-ui/icons/DescriptionOutlined'
-import DeleteIcon from '@material-ui/icons/DeleteOutlineOutlined'
+import PublishIcon from '@mui/icons-material/Publish'
+import HighlightOffIcon from '@mui/icons-material/HighlightOff'
+import FileIcon from '@mui/icons-material/DescriptionOutlined'
+import DeleteIcon from '@mui/icons-material/DeleteOutlineOutlined'
 
 import { uploadFile } from 'lib/project'
-
-const useStyles = makeStyles((theme) => ({
-  input: {
-    '& input': {
-      color: 'rgba(0, 0, 0, 0.54)'
-    },
-    '& path': {
-      color: 'rgba(0, 0, 0, 0.54)'
-    }
-  }
-}))
 
 const Uploader = (props) => {
   const { name, callbackFn, fieldError, values, maxFiles, size } = props
   const { t } = useTranslation('common')
-  const classes = useStyles()
 
   const [uploads, setUploads] = useState([...values])
   const [inputKey, setInputKey] = useState(Date.now())
@@ -103,14 +92,21 @@ const Uploader = (props) => {
         key={inputKey}
         type="file"
         label=""
-        className={classes.input}
-        required
         name={name}
         variant="outlined"
         onChange={handleChange}
         disabled={maxFiles <= uploads.length}
         size={size}
         fullWidth
+        sx={{
+          '& input': {
+            color: 'rgba(0, 0, 0, 0.54)'
+          },
+          '& path': {
+            color: 'rgba(0, 0, 0, 0.54)'
+          }
+        }}
+        required
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">

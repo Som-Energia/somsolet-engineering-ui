@@ -1,34 +1,35 @@
 import { forwardRef, useState, useEffect } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-import { makeStyles } from '@material-ui/core/styles'
 
-import Button from '@material-ui/core/Button'
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import Divider from '@material-ui/core/Divider'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Grid from '@material-ui/core/Grid'
-import IconButton from '@material-ui/core/IconButton'
-import Slide from '@material-ui/core/Slide'
-import Switch from '@material-ui/core/Switch'
-import TextField from '@material-ui/core/TextField'
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  FormControlLabel,
+  Grid,
+  IconButton,
+  Slide,
+  Switch,
+  TextField
+} from '@mui/material'
 
-import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined'
-import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
-import PlaceOutlinedIcon from '@material-ui/icons/PlaceOutlined'
-import PermIdentityOutlinedIcon from '@material-ui/icons/PermIdentityOutlined'
-import WbSunnyOutlinedIcon from '@material-ui/icons/WbSunnyOutlined'
-import SaveIcon from '@material-ui/icons/SaveOutlined'
-import CloseIcon from '@material-ui/icons/CloseOutlined'
-import PhoneOutlinedIcon from '@material-ui/icons/PhoneOutlined'
-import MailOutlineIcon from '@material-ui/icons/MailOutline'
-import LanguageIcon from '@material-ui/icons/Language'
-import PowerOutlinedIcon from '@material-ui/icons/PowerOutlined'
-import FileIcon from '@material-ui/icons/DescriptionOutlined'
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
+import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined'
+import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined'
+import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined'
+import SaveIcon from '@mui/icons-material/SaveOutlined'
+import CloseIcon from '@mui/icons-material/CloseOutlined'
+import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined'
+import MailOutlineIcon from '@mui/icons-material/MailOutline'
+import LanguageIcon from '@mui/icons-material/Language'
+import PowerOutlinedIcon from '@mui/icons-material/PowerOutlined'
+import FileIcon from '@mui/icons-material/DescriptionOutlined'
 
-import { getTechnicalDetails } from '@/lib/project'
+import { getTechnicalDetails } from '@lib/project'
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
@@ -88,6 +89,350 @@ const Field = (props) => {
     )
   }
 }
+
+const ProjectTechnicalDetails = (props) => {
+  const classes = useStyles()
+  const { t } = useTranslation('common')
+  const { projectId } = props
+
+  const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [data, setData] = useState(props)
+
+  useEffect(() => {
+    if (open) {
+      setLoading(true)
+      getTechnicalDetails(projectId)
+        .then((response) => {
+          const technicalDetails = response.data?.[0]
+          setData({ ...data, ...technicalDetails })
+          setLoading(false)
+        })
+        .catch((error) => console.log(error))
+    }
+  }, [open])
+
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  const handleChange = (event) => {
+    const nameValue = {}
+    nameValue[event.target.name] = event.target.value
+    console.log(nameValue)
+    setData({ ...data, ...nameValue })
+    console.log(data)
+  }
+
+  return (
+    <>
+      <IconButton size="small" onClick={handleClickOpen}>
+        <SettingsOutlinedIcon />
+      </IconButton>
+      <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        fullWidth
+        maxWidth="lg"
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description">
+        <DialogTitle
+          sx={{
+            '& h2': {
+              display: 'flex',
+              alignItems: 'center'
+            }
+          }}>
+          <SettingsOutlinedIcon />
+          &nbsp;{'Technical Details'}
+        </DialogTitle>
+        <DialogContent>
+          <Grid container spacing={4}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Installation"
+                size="small"
+                variant="outlined"
+                fullWidth
+                value={data?.name}
+                disabled
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Campanya"
+                size="small"
+                variant="outlined"
+                fullWidth
+                sx={{
+                  '& input': {
+                    color: 'rgba(0, 0, 0, 0.54)'
+                  },
+                  '& path': {
+                    color: 'rgba(0, 0, 0, 0.54)'
+                  }
+                }}
+                InputProps={{
+                  startAdornment: <WbSunnyOutlinedIcon />
+                }}
+                value={data?.campaignName}
+                disabled
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                label="Client"
+                id="standard-size-small"
+                size="small"
+                variant="outlined"
+                sx={{
+                  '& input': {
+                    color: 'rgba(0, 0, 0, 0.54)'
+                  },
+                  '& path': {
+                    color: 'rgba(0, 0, 0, 0.54)'
+                  }
+                }}
+                fullWidth
+                InputProps={{
+                  startAdornment: <PermIdentityOutlinedIcon />
+                }}
+                value={data?.registeredPerson?.name}
+                disabled
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <TextField
+                label="Email"
+                size="small"
+                variant="outlined"
+                sx={{
+                  '& input': {
+                    color: 'rgba(0, 0, 0, 0.54)'
+                  },
+                  '& path': {
+                    color: 'rgba(0, 0, 0, 0.54)'
+                  }
+                }}
+                fullWidth
+                InputProps={{
+                  startAdornment: <MailOutlineIcon />
+                }}
+                value={data?.registeredPerson?.email}
+                disabled
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <TextField
+                label="Phone"
+                size="small"
+                variant="outlined"
+                sx={{
+                  '& input': {
+                    color: 'rgba(0, 0, 0, 0.54)'
+                  },
+                  '& path': {
+                    color: 'rgba(0, 0, 0, 0.54)'
+                  }
+                }}
+                fullWidth
+                InputProps={{
+                  startAdornment: <PhoneOutlinedIcon />
+                }}
+                value={data?.registeredPerson?.phoneNumber}
+                disabled
+              />
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              <TextField
+                label="Language"
+                size="small"
+                variant="outlined"
+                sx={{
+                  '& input': {
+                    color: 'rgba(0, 0, 0, 0.54)'
+                  },
+                  '& path': {
+                    color: 'rgba(0, 0, 0, 0.54)'
+                  }
+                }}
+                fullWidth
+                InputProps={{
+                  startAdornment: <LanguageIcon />
+                }}
+                value={data?.registeredPerson?.language}
+                disabled
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Divider />
+            </Grid>
+
+            <Grid item xs={12} sm={4}>
+              <TextField
+                label="Adreça"
+                id="standard-size-small"
+                size="small"
+                variant="outlined"
+                sx={{
+                  '& input': {
+                    color: 'rgba(0, 0, 0, 0.54)'
+                  },
+                  '& path': {
+                    color: 'rgba(0, 0, 0, 0.54)'
+                  }
+                }}
+                fullWidth
+                InputProps={{
+                  startAdornment: <HomeOutlinedIcon />
+                }}
+                value={data?.supplyPoint?.address?.street}
+                disabled
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <TextField
+                label="Municipi"
+                id="standard-size-small"
+                size="small"
+                variant="outlined"
+                sx={{
+                  '& input': {
+                    color: 'rgba(0, 0, 0, 0.54)'
+                  },
+                  '& path': {
+                    color: 'rgba(0, 0, 0, 0.54)'
+                  }
+                }}
+                fullWidth
+                InputProps={{
+                  startAdornment: <PlaceOutlinedIcon />
+                }}
+                value={data?.supplyPoint?.address?.municipality}
+                disabled
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <TextField
+                label="Comarca"
+                id="standard-size-small"
+                size="small"
+                variant="outlined"
+                fullWidth
+                value={data?.supplyPoint?.address?.administrativeDivision}
+                disabled
+              />
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              <TextField
+                label="Codi Postal"
+                id="standard-size-small"
+                size="small"
+                variant="outlined"
+                fullWidth
+                value={data?.supplyPoint?.address?.postalCode}
+                disabled
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Divider />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <TextField
+                label="Numero contracte"
+                id="standard-size-small"
+                size="small"
+                variant="outlined"
+                fullWidth
+                sx={{
+                  '& input': {
+                    color: 'rgba(0, 0, 0, 0.54)'
+                  },
+                  '& path': {
+                    color: 'rgba(0, 0, 0, 0.54)'
+                  }
+                }}
+                InputProps={{
+                  startAdornment: <FileIcon />
+                }}
+                disabled
+                value={data?.contract_number}
+              />
+            </Grid>
+            <Grid item xs={12} sm={9}>
+              <TextField
+                label="CUPS"
+                id="standard-size-small"
+                name="cups"
+                size="small"
+                variant="outlined"
+                fullWidth
+                sx={{
+                  '& input': {
+                    color: 'rgba(0, 0, 0, 0.54)'
+                  },
+                  '& path': {
+                    color: 'rgba(0, 0, 0, 0.54)'
+                  }
+                }}
+                InputProps={{
+                  startAdornment: <PowerOutlinedIcon />
+                }}
+                disabled
+                value={data?.cups}
+              />
+            </Grid>
+            {fields.map((field, index) => (
+              <Grid
+                key={index}
+                item
+                xs={12}
+                sm={
+                  field?.type === 'textarea' || field.type === 'divider'
+                    ? 12
+                    : 4
+                }>
+                <Field
+                  {...field}
+                  data={data}
+                  loading={loading}
+                  handleChange={handleChange}
+                />
+              </Grid>
+            ))}
+            <Grid item xs={12}>
+              <Divider />
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={handleClose}
+            variant="outlined"
+            color="inherit"
+            startIcon={<CloseIcon />}>
+            Tanca
+          </Button>
+          <Button
+            onClick={handleClose}
+            variant="outlined"
+            color="inherit"
+            startIcon={<SaveIcon />}>
+            Desa
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  )
+}
+
+export default ProjectTechnicalDetails
 
 const fields = [
   { name: 'roof_orientation', label: 'Orientació coberta', type: undefined },
@@ -213,303 +558,3 @@ const fields = [
     type: undefined
   }
 ]
-
-const ProjectTechnicalDetails = (props) => {
-  const classes = useStyles()
-  const { t } = useTranslation('common')
-  const { projectId } = props
-
-  const [open, setOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [data, setData] = useState(props)
-
-  useEffect(() => {
-    if (open) {
-      setLoading(true)
-      getTechnicalDetails(projectId)
-        .then((response) => {
-          const technicalDetails = response.data?.[0]
-          setData({ ...data, ...technicalDetails })
-          setLoading(false)
-        })
-        .catch((error) => console.log(error))
-    }
-  }, [open])
-
-  const handleClickOpen = () => {
-    setOpen(true)
-  }
-
-  const handleClose = () => {
-    setOpen(false)
-  }
-
-  const handleChange = (event) => {
-    const nameValue = {}
-    nameValue[event.target.name] = event.target.value
-    console.log(nameValue)
-    setData({ ...data, ...nameValue })
-    console.log(data)
-  }
-
-  return (
-    <>
-      <IconButton size="small" onClick={handleClickOpen}>
-        <SettingsOutlinedIcon />
-      </IconButton>
-      <Dialog
-        open={open}
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={handleClose}
-        fullWidth
-        maxWidth="lg"
-        aria-labelledby="alert-dialog-slide-title"
-        aria-describedby="alert-dialog-slide-description">
-        <DialogTitle className={classes.dialogTitle}>
-          <SettingsOutlinedIcon />
-          &nbsp;{'Technical Details'}
-        </DialogTitle>
-        <DialogContent>
-          <Grid container spacing={4}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Installation"
-                size="small"
-                variant="outlined"
-                fullWidth
-                value={data?.name}
-                disabled
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Campanya"
-                size="small"
-                variant="outlined"
-                fullWidth
-                className={classes.input}
-                InputProps={{
-                  startAdornment: <WbSunnyOutlinedIcon />
-                }}
-                value={data?.campaignName}
-                disabled
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="Client"
-                id="standard-size-small"
-                size="small"
-                variant="outlined"
-                className={classes.input}
-                fullWidth
-                InputProps={{
-                  startAdornment: <PermIdentityOutlinedIcon />
-                }}
-                value={data?.registeredPerson?.name}
-                disabled
-              />
-            </Grid>
-            <Grid item xs={12} sm={3}>
-              <TextField
-                label="Email"
-                size="small"
-                variant="outlined"
-                className={classes.input}
-                fullWidth
-                InputProps={{
-                  startAdornment: <MailOutlineIcon />
-                }}
-                value={data?.registeredPerson?.email}
-                disabled
-              />
-            </Grid>
-            <Grid item xs={12} sm={3}>
-              <TextField
-                label="Phone"
-                size="small"
-                variant="outlined"
-                className={classes.input}
-                fullWidth
-                InputProps={{
-                  startAdornment: <PhoneOutlinedIcon />
-                }}
-                value={data?.registeredPerson?.phoneNumber}
-                disabled
-              />
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              <TextField
-                label="Language"
-                size="small"
-                variant="outlined"
-                className={classes.input}
-                fullWidth
-                InputProps={{
-                  startAdornment: <LanguageIcon />
-                }}
-                value={data?.registeredPerson?.language}
-                disabled
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Divider />
-            </Grid>
-
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="Adreça"
-                id="standard-size-small"
-                size="small"
-                variant="outlined"
-                className={classes.input}
-                fullWidth
-                InputProps={{
-                  startAdornment: <HomeOutlinedIcon />
-                }}
-                value={data?.supplyPoint?.address?.street}
-                disabled
-              />
-            </Grid>
-            <Grid item xs={12} sm={3}>
-              <TextField
-                label="Municipi"
-                id="standard-size-small"
-                size="small"
-                variant="outlined"
-                className={classes.input}
-                fullWidth
-                InputProps={{
-                  startAdornment: <PlaceOutlinedIcon />
-                }}
-                value={data?.supplyPoint?.address?.municipality}
-                disabled
-              />
-            </Grid>
-            <Grid item xs={12} sm={3}>
-              <TextField
-                label="Comarca"
-                id="standard-size-small"
-                size="small"
-                variant="outlined"
-                fullWidth
-                value={data?.supplyPoint?.address?.administrativeDivision}
-                disabled
-              />
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              <TextField
-                label="Codi Postal"
-                id="standard-size-small"
-                size="small"
-                variant="outlined"
-                fullWidth
-                value={data?.supplyPoint?.address?.postalCode}
-                disabled
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Divider />
-            </Grid>
-            <Grid item xs={12} sm={3}>
-              <TextField
-                label="Numero contracte"
-                id="standard-size-small"
-                size="small"
-                variant="outlined"
-                fullWidth
-                className={classes.input}
-                InputProps={{
-                  startAdornment: <FileIcon />
-                }}
-                disabled
-                value={data?.contract_number}
-              />
-            </Grid>
-            <Grid item xs={12} sm={9}>
-              <TextField
-                label="CUPS"
-                id="standard-size-small"
-                name="cups"
-                size="small"
-                variant="outlined"
-                fullWidth
-                className={classes.input}
-                InputProps={{
-                  startAdornment: <PowerOutlinedIcon />
-                }}
-                disabled
-                value={data?.cups}
-              />
-            </Grid>
-            {fields.map((field, index) => (
-              <Grid
-                key={index}
-                item
-                xs={12}
-                sm={
-                  field?.type === 'textarea' || field.type === 'divider'
-                    ? 12
-                    : 4
-                }>
-                <Field
-                  {...field}
-                  data={data}
-                  loading={loading}
-                  handleChange={handleChange}
-                />
-              </Grid>
-            ))}
-            <Grid item xs={12}>
-              <Divider />
-            </Grid>
-          </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={handleClose}
-            variant="outlined"
-            color="inherit"
-            startIcon={<CloseIcon />}>
-            Tanca
-          </Button>
-          <Button
-            onClick={handleClose}
-            variant="outlined"
-            color="inherit"
-            startIcon={<SaveIcon />}>
-            Desa
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
-  )
-}
-
-export default ProjectTechnicalDetails
-
-const useStyles = makeStyles((theme) => ({
-  link: {
-    textDecoration: 'underline',
-    textUnderlineOffset: '1px',
-    cursor: 'pointer',
-    '&:hover': {
-      color: theme.palette.primary.main
-    }
-  },
-  dialogTitle: {
-    '& h2': {
-      display: 'flex',
-      alignItems: 'center'
-    }
-  },
-  input: {
-    '& input': {
-      color: 'rgba(0, 0, 0, 0.54)'
-    },
-    '& path': {
-      color: 'rgba(0, 0, 0, 0.54)'
-    }
-  }
-}))

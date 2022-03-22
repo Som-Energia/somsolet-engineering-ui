@@ -3,61 +3,62 @@ import useTranslation from 'next-translate/useTranslation'
 import { CSVLink } from 'react-csv'
 import * as dayjs from 'dayjs'
 
-import Breadcrumbs from 'components/layout/Breadcrumbs'
-import StageRow from 'components/somsolet/StageRow'
-import ProjectTechnicalDetails from 'components/somsolet/ProjectTechnicalDetails'
+import Breadcrumbs from '@components/layout/Breadcrumbs'
+import StageRow from '@components/somsolet/StageRow'
+import ProjectTechnicalDetails from '@components/somsolet/ProjectTechnicalDetails'
 
-import { makeStyles } from '@material-ui/core/styles'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Checkbox from '@mui/material/Checkbox'
+import Collapse from '@mui/material/Collapse'
+import Container from '@mui/material/Container'
 
-import Box from '@material-ui/core/Box'
-import Button from '@material-ui/core/Button'
-import Checkbox from '@material-ui/core/Checkbox'
-import Collapse from '@material-ui/core/Collapse'
-import Container from '@material-ui/core/Container'
-import Chip from '@material-ui/core/Chip'
-import FormControl from '@material-ui/core/FormControl'
-import Link from '@material-ui/core/Link'
-import Grid from '@material-ui/core/Grid'
-import Heading from '@/components/layout/Heading'
-import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined'
-import IconButton from '@material-ui/core/IconButton'
-import InputLabel from '@material-ui/core/InputLabel'
-import MenuItem from '@material-ui/core/MenuItem'
-import Paper from '@material-ui/core/Paper'
-import Select from '@material-ui/core/Select'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableContainer from '@material-ui/core/TableContainer'
-import TableHead from '@material-ui/core/TableHead'
-import TablePagination from '@material-ui/core/TablePagination'
-import TableRow from '@material-ui/core/TableRow'
-import TextField from '@material-ui/core/TextField'
+import Chip from '@mui/material/Chip'
+import FormControl from '@mui/material/FormControl'
+import Link from '@mui/material/Link'
+import Grid from '@mui/material/Grid'
+import IconButton from '@mui/material/IconButton'
+import InputLabel from '@mui/material/InputLabel'
 
-import TimelineOutlinedIcon from '@material-ui/icons/TimelineOutlined'
-import PlaceOutlinedIcon from '@material-ui/icons/PlaceOutlined'
-import PowerOutlinedIcon from '@material-ui/icons/PowerOutlined'
-import WbSunnyOutlinedIcon from '@material-ui/icons/WbSunnyOutlined'
-import PhoneOutlinedIcon from '@material-ui/icons/PhoneOutlined'
-import MailOutlineIcon from '@material-ui/icons/MailOutline'
-import LanguageIcon from '@material-ui/icons/Language'
-import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined'
-import PermIdentityOutlinedIcon from '@material-ui/icons/PermIdentityOutlined'
-import FilterListIcon from '@material-ui/icons/FilterList'
-import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined'
+import MenuItem from '@mui/material/MenuItem'
+import Paper from '@mui/material/Paper'
+import Select from '@mui/material/Select'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableHead from '@mui/material/TableHead'
+
+import TableContainer from '@mui/material/TableContainer'
+import TablePagination from '@mui/material/TablePagination'
+import TableRow from '@mui/material/TableRow'
+import TextField from '@mui/material/TextField'
+
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
+import TimelineOutlinedIcon from '@mui/icons-material/TimelineOutlined'
+import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined'
+import PowerOutlinedIcon from '@mui/icons-material/PowerOutlined'
+import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined'
+import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined'
+import MailOutlineIcon from '@mui/icons-material/MailOutline'
+import LanguageIcon from '@mui/icons-material/Language'
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
+import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined'
+import FilterListIcon from '@mui/icons-material/FilterList'
+import GetAppOutlinedIcon from '@mui/icons-material/GetAppOutlined'
 
 import CampaignContext from 'context/campaign'
+import Heading from '@components/layout/Heading'
 
 import {
   getProjects,
   getCCH,
   getStages,
   getSelectedTechnicalDetails
-} from '@/lib/project'
-import { getCampaign } from '@/lib/campaign'
+} from '@lib/project'
+
+import { getCampaign } from '@lib/campaign'
 
 export default function Campaign(props) {
-  const classes = useStyles()
   const { projects, campaign, stages } = props
   const { t } = useTranslation()
 
@@ -116,154 +117,182 @@ export default function Campaign(props) {
   }
 
   return (
-    <>
-      <div className={classes.root}>
-        <Container>
-          <div className={classes.top}>
-            <Heading>
-              <WbSunnyOutlinedIcon fontSize="large" />
-              &nbsp;{`${campaign?.name}`}
-            </Heading>
-            <Breadcrumbs />
-          </div>
-          {showFilters && (
-            <Paper
-              aria-label="filters"
-              elevation={0}
-              className={classes.filters}>
-              <Grid container spacing={3}>
-                <Grid item sm={2}>
-                  <FormControl fullWidth size="small" variant="outlined">
-                    <InputLabel id="status-select-label">Status</InputLabel>
-                    <Select
-                      labelId="status-select-label"
-                      id="status-select"
-                      label="Status">
-                      {stages.map(({ stageId, stageName }) => (
-                        <MenuItem key={stageId} value={stageId}>
-                          {stageName}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item sm={2}>
-                  <FormControl fullWidth size="small" variant="outlined">
-                    <InputLabel id="warning-select-label">Warning</InputLabel>
-                    <Select
-                      labelId="warning-select-label"
-                      id="warning-select"
-                      label="Warning">
-                      <MenuItem value={10}>Ten</MenuItem>
-                      <MenuItem value={20}>Twenty</MenuItem>
-                      <MenuItem value={30}>Thirty</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item sm={3}>
-                  <TextField
-                    label="Client"
-                    fullWidth
-                    size="small"
-                    variant="outlined"
-                    InputProps={{
-                      startAdornment: (
-                        <PermIdentityOutlinedIcon className={classes.input} />
-                      )
-                    }}
-                  />
-                </Grid>
-                <Grid item sm={3}>
-                  <TextField
-                    label="Municipi"
-                    fullWidth
-                    size="small"
-                    variant="outlined"
-                    InputProps={{
-                      startAdornment: (
-                        <PlaceOutlinedIcon className={classes.input} />
-                      )
-                    }}
-                  />
-                </Grid>
-                <Grid
-                  item
-                  sm={2}
-                  style={{
-                    textAlign: 'right',
-                    display: 'flex',
-                    'justify-content': 'space-between'
-                  }}>
-                  <Button color="primary" variant="contained" disableElevation>
-                    <SearchOutlinedIcon />
-                  </Button>
-                  <CSVLink
-                    data={csvData}
-                    asyncOnClick={true}
-                    filename={`${campaign.name} - ${dayjs().format(
-                      'YYYYMMDDHHmmss'
-                    )}.csv`}
-                    onClick={handleDownload}>
-                    <Button
-                      color="secondary"
-                      variant="contained"
-                      disabled={!selectedProjects.length}>
-                      <GetAppOutlinedIcon />
-                    </Button>
-                  </CSVLink>
-                </Grid>
+    <Box sx={{ width: '100%', marginBottom: '12px' }}>
+      <Container>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '0'
+          }}>
+          <Heading>
+            <WbSunnyOutlinedIcon fontSize="large" />
+            &nbsp;{`${campaign?.name}`}
+          </Heading>
+          <Breadcrumbs />
+        </Box>
+        {showFilters && (
+          <Paper
+            aria-label="filters"
+            elevation={0}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              padding: '20px 20px',
+              marginBottom: '16px'
+            }}>
+            <Grid container spacing={3}>
+              <Grid item sm={2}>
+                <FormControl fullWidth size="small" variant="outlined">
+                  <InputLabel id="status-select-label">Status</InputLabel>
+                  <Select
+                    labelId="status-select-label"
+                    id="status-select"
+                    label="Status">
+                    {stages.map(({ stageId, stageName }) => (
+                      <MenuItem key={stageId} value={stageId}>
+                        {stageName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
-            </Paper>
-          )}
+              <Grid item sm={2}>
+                <FormControl fullWidth size="small" variant="outlined">
+                  <InputLabel id="warning-select-label">Warning</InputLabel>
+                  <Select
+                    labelId="warning-select-label"
+                    id="warning-select"
+                    label="Warning">
+                    <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item sm={3}>
+                <TextField
+                  label="Client"
+                  fullWidth
+                  size="small"
+                  variant="outlined"
+                  InputProps={{
+                    startAdornment: (
+                      <PermIdentityOutlinedIcon
+                        sx={{
+                          '& input': {
+                            color: 'rgba(0, 0, 0, 0.54)'
+                          },
+                          '& path': {
+                            color: 'rgba(0, 0, 0, 0.54)'
+                          }
+                        }}
+                      />
+                    )
+                  }}
+                />
+              </Grid>
+              <Grid item sm={3}>
+                <TextField
+                  label="Municipi"
+                  fullWidth
+                  size="small"
+                  variant="outlined"
+                  InputProps={{
+                    startAdornment: (
+                      <PlaceOutlinedIcon
+                        sx={{
+                          '& input': {
+                            color: 'rgba(0, 0, 0, 0.54)'
+                          },
+                          '& path': {
+                            color: 'rgba(0, 0, 0, 0.54)'
+                          }
+                        }}
+                      />
+                    )
+                  }}
+                />
+              </Grid>
+              <Grid
+                item
+                sm={2}
+                style={{
+                  textAlign: 'right',
+                  display: 'flex',
+                  'justify-content': 'space-between'
+                }}>
+                <Button color="primary" variant="contained" disableElevation>
+                  <SearchOutlinedIcon />
+                </Button>
+                <CSVLink
+                  data={csvData}
+                  asyncOnClick={true}
+                  filename={`${campaign.name} - ${dayjs().format(
+                    'YYYYMMDDHHmmss'
+                  )}.csv`}
+                  onClick={handleDownload}>
+                  <Button
+                    color="secondary"
+                    variant="contained"
+                    disabled={!selectedProjects.length}>
+                    <GetAppOutlinedIcon />
+                  </Button>
+                </CSVLink>
+              </Grid>
+            </Grid>
+          </Paper>
+        )}
 
-          <TableContainer component={Paper} elevation={0}>
-            <Table
-              className={classes.table}
-              aria-labelledby="tableTitle"
-              size="medium"
-              aria-label="campanya detalls">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="center" className={classes.headerCell}>
-                    <IconButton size="small" onClick={toggleFilters}>
-                      <FilterListIcon />
-                    </IconButton>
+        <TableContainer component={Paper} elevation={0}>
+          <Table
+            sx={{}}
+            aria-labelledby="tableTitle"
+            size="medium"
+            aria-label="campanya detalls">
+            <TableHead>
+              <TableRow>
+                <TableCell
+                  align="center"
+                  sx={{ whiteSpace: 'nowrap', textTransform: 'uppercase' }}>
+                  <IconButton size="small" onClick={toggleFilters}>
+                    <FilterListIcon />
+                  </IconButton>
+                </TableCell>
+                {headers.map((header, index) => (
+                  <TableCell
+                    key={index}
+                    align={index > 0 ? 'center' : 'left'}
+                    sx={{ whiteSpace: 'nowrap', textTransform: 'uppercase' }}>
+                    {t(header)}
                   </TableCell>
-                  {headers.map((header, index) => (
-                    <TableCell
-                      key={index}
-                      align={index > 0 ? 'center' : 'left'}
-                      className={classes.headerCell}>
-                      {t(header)}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {projects.map((project, index) => (
-                  <Row key={index} {...project} />
                 ))}
-              </TableBody>
-            </Table>
-            <TablePagination
-              rowsPerPageOptions={[10, 25, 50]}
-              component="div"
-              count={projects.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onChangePage={handleChangePage}
-              onChangeRowsPerPage={handleChangeRowsPerPage}
-            />
-          </TableContainer>
-        </Container>
-      </div>
-    </>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {projects.map((project, index) => (
+                <Row key={index} {...project} />
+              ))}
+            </TableBody>
+          </Table>
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 50]}
+            component="div"
+            count={projects.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
+        </TableContainer>
+      </Container>
+    </Box>
   )
 }
 
 const Row = (props) => {
   const { description, warnings, stages } = props
-  const classes = useStyles()
   const [selected, setSelected] = useState(false)
   const [open, setOpen] = useState(false)
 
@@ -288,7 +317,13 @@ const Row = (props) => {
 
   return (
     <>
-      <TableRow className={classes.cell}>
+      <TableRow
+        sx={{
+          whiteSpace: 'nowrap',
+          '& > *': {
+            borderBottom: 'unset'
+          }
+        }}>
         <TableCell>
           <Checkbox checked={selected} onChange={handleCheck} />
         </TableCell>
@@ -303,7 +338,14 @@ const Row = (props) => {
         <TableCell>
           <Link
             color="inherit"
-            className={classes.link}
+            sx={{
+              textDecoration: 'underline',
+              textUnderlineOffset: '1px',
+              cursor: 'pointer',
+              '&:hover': {
+                color: theme.palette.primary.main
+              }
+            }}
             onClick={() => setOpen(!open)}>
             {description?.registeredPerson?.name}
           </Link>
@@ -427,67 +469,23 @@ const Row = (props) => {
   )
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-    marginBottom: '12px'
-  },
-  top: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '0'
-  },
-  filters: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: '20px 20px',
-    marginBottom: '16px'
-  },
-  formControl: {
-    minWidth: 120
-  },
-  headerCell: {
-    whiteSpace: 'nowrap',
-    textTransform: 'uppercase'
-  },
-  cell: {
-    whiteSpace: 'nowrap',
-    '& > *': {
-      borderBottom: 'unset'
-    }
-  },
-  link: {
-    textDecoration: 'underline',
-    textUnderlineOffset: '1px',
-    cursor: 'pointer',
-    '&:hover': {
-      color: theme.palette.primary.main
-    }
-  },
-  input: {
-    '& input': {
-      color: 'rgba(0, 0, 0, 0.54)'
-    },
-    '& path': {
-      color: 'rgba(0, 0, 0, 0.54)'
-    }
-  }
-}))
-
 export async function getServerSideProps(context) {
-  const { campaignId } = context.query
+  try {
+    const { campaignId } = context.query
 
-  const projectsResponse = await getProjects(campaignId)
-  const projects = projectsResponse?.data || []
+    const projectsResponse = await getProjects(campaignId)
+    const projects = projectsResponse?.data || []
 
-  const campaignResponse = await getCampaign(campaignId)
-  const campaign = campaignResponse.data || []
+    const campaignResponse = await getCampaign(campaignId)
+    const campaign = campaignResponse.data || []
 
-  const stageResponse = await getStages()
-  const stages = stageResponse?.data || []
+    const stageResponse = await getStages()
+    const stages = stageResponse?.data || []
 
-  return {
-    props: { projects, campaign, stages } // will be passed to the page component as props
+    return {
+      props: { projects, campaign, stages } // will be passed to the page component as props
+    }
+  } catch (error) {
+    console.log(error)
   }
 }

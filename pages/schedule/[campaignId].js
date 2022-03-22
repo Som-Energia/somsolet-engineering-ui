@@ -1,14 +1,15 @@
-import { Container, Typography } from '@material-ui/core'
+import { Container } from '@mui/material'
 import { useRouter } from 'next/router'
+import Heading from '@components/layout/Heading'
 
 export default function Campaign() {
   const router = useRouter()
   const { campaignId } = router.query
   return (
-    <div>
+    <>
       <Container>
-        <Typography variant="h3">{`Calendari #${campaignId}`}</Typography>
+        <Heading>{`Calendari #${campaignId}`}</Heading>
       </Container>
-    </div>
+    </>
   )
 }

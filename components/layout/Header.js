@@ -1,22 +1,20 @@
 import React, { useState } from 'react'
 
-import { makeStyles } from '@material-ui/core/styles'
-import { AppBar, Toolbar, IconButton } from '@material-ui/core'
+import { AppBar, Box, Toolbar, IconButton } from '@mui/material'
 
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
 
-import AccountCircle from '@material-ui/icons/AccountCircleOutlined'
-import ExitToAppIcon from '@material-ui/icons/ExitToApp'
-import PersonIcon from '@material-ui/icons/PersonOutlineOutlined'
+import AccountCircle from '@mui/icons-material/AccountCircleOutlined'
+import ExitToAppIcon from '@mui/icons-material/ExitToApp'
+import PersonIcon from '@mui/icons-material/PersonOutlineOutlined'
 
 import Link from 'next/link'
 
 require('typeface-montserrat')
 
 const Header = () => {
-  const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
 
@@ -34,15 +32,31 @@ const Header = () => {
 
   return (
     <AppBar color="inherit" elevation={0}>
-      <Toolbar className={classes.toolbar}>
-        <div className={classes.brand}>
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            '& h3': {
+              fontFamily: 'Montserrat',
+              textTransform: 'uppercase',
+              fontSize: '18px',
+              fontWeight: 600
+            },
+            '& img': {
+              maxWidth: '60px',
+              height: 'auto',
+              marginRight: '0.75rem',
+              paddingBottom: ''
+            }
+          }}>
           <Link href="/" passHref>
             <a>
               <img src="/cuca.png" alt="Som Energia" />
             </a>
           </Link>
           <h3>Som Solet</h3>
-        </div>
+        </Box>
         <div>
           <IconButton
             aria-label="account of current user"
@@ -86,26 +100,3 @@ const Header = () => {
 }
 
 export default Header
-
-const useStyles = makeStyles((theme) => ({
-  brand: {
-    display: 'flex',
-    alignItems: 'center',
-    '& h3': {
-      fontFamily: 'Montserrat',
-      textTransform: 'uppercase',
-      fontSize: '18px',
-      fontWeight: 600
-    },
-    '& img': {
-      maxWidth: '60px',
-      height: 'auto',
-      marginRight: '0.75rem',
-      paddingBottom: ''
-    }
-  },
-  toolbar: {
-    display: 'flex',
-    justifyContent: 'space-between'
-  }
-}))

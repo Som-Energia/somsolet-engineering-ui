@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
-import MuiBreadcrumbs from '@material-ui/core/Breadcrumbs'
-import MuiLink from '@material-ui/core/Link'
-import IconButton from '@material-ui/core/IconButton'
+import MuiBreadcrumbs from '@mui/material/Breadcrumbs'
+import MuiLink from '@mui/material/Link'
+import IconButton from '@mui/material/IconButton'
 
-import AppsOutlinedIcon from '@material-ui/icons/AppsOutlined'
+import AppsOutlinedIcon from '@mui/icons-material/AppsOutlined'
 
 const convertBreadcrumb = (string) => {
   return string

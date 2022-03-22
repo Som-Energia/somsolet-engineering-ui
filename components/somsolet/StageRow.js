@@ -1,34 +1,35 @@
 import { forwardRef, useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-import { makeStyles } from '@material-ui/core/styles'
+import { useTheme } from '@mui/styles'
 
-import Uploader from 'components/somsolet/Uploader'
+import Uploader from '@components/somsolet/Uploader'
 
-import Button from '@material-ui/core/Button'
-import Divider from '@material-ui/core/Divider'
-import Switch from '@material-ui/core/Switch'
-import Typography from '@material-ui/core/Typography'
-import FormControl from '@material-ui/core/FormControl'
-import FormLabel from '@material-ui/core/FormLabel'
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  IconButton,
+  Grid,
+  Link,
+  TextField,
+  Slide,
+  Switch,
+  Typography,
+  FormControl,
+  FormLabel
+} from '@mui/material'
 
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import IconButton from '@material-ui/core/IconButton'
-import Grid from '@material-ui/core/Grid'
-import Link from '@material-ui/core/Link'
-import TextField from '@material-ui/core/TextField'
-import Slide from '@material-ui/core/Slide'
-
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday'
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
-import PublishOutlinedIcon from '@material-ui/icons/PublishOutlined'
-import PermIdentityOutlinedIcon from '@material-ui/icons/PermIdentityOutlined'
-import FileIcon from '@material-ui/icons/DescriptionOutlined'
-import SaveIcon from '@material-ui/icons/SaveOutlined'
-import CloseIcon from '@material-ui/icons/CloseOutlined'
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
+import PublishOutlinedIcon from '@mui/icons-material/PublishOutlined'
+import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined'
+import FileIcon from '@mui/icons-material/DescriptionOutlined'
+import SaveIcon from '@mui/icons-material/SaveOutlined'
+import CloseIcon from '@mui/icons-material/CloseOutlined'
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
@@ -43,7 +44,7 @@ const StageRow = (props) => {
     project = 'Projecte',
     client = 'Client'
   } = props
-  const classes = useStyles()
+  const theme = useTheme()
   const { t } = useTranslation('common')
 
   const [open, setOpen] = useState(false)
@@ -64,7 +65,12 @@ const StageRow = (props) => {
   }
 
   return (
-    <div className={classes.stage}>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-evenly',
+        alignItems: 'center'
+      }}>
       <div>
         {date &&
           (invalid === true ? (
@@ -84,7 +90,14 @@ const StageRow = (props) => {
         <Link
           href="#"
           color="inherit"
-          className={classes.link}
+          sx={{
+            textDecoration: 'underline',
+            textUnderlineOffset: '1px',
+            cursor: 'pointer',
+            '&:hover': {
+              color: theme.palette.primary.main
+            }
+          }}
           onClick={handleClickOpen}>
           <span>{date && new Date(date).toLocaleDateString()}</span>
         </Link>
@@ -105,7 +118,13 @@ const StageRow = (props) => {
         maxWidth="md"
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description">
-        <DialogTitle className={classes.dialogTitle}>
+        <DialogTitle
+          sx={{
+            '& h2': {
+              display: 'flex',
+              alignItems: 'center'
+            }
+          }}>
           <FileIcon /> &nbsp;{`${id}`.toUpperCase()}
         </DialogTitle>
         <DialogContent style={{ paddingTop: '16px' }}>
@@ -218,30 +237,8 @@ const StageRow = (props) => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </Box>
   )
 }
 
 export default StageRow
-
-const useStyles = makeStyles((theme) => ({
-  stage: {
-    display: 'flex',
-    justifyContent: 'space-evenly',
-    alignItems: 'center'
-  },
-  link: {
-    textDecoration: 'underline',
-    textUnderlineOffset: '1px',
-    cursor: 'pointer',
-    '&:hover': {
-      color: theme.palette.primary.main
-    }
-  },
-  dialogTitle: {
-    '& h2': {
-      display: 'flex',
-      alignItems: 'center'
-    }
-  }
-}))

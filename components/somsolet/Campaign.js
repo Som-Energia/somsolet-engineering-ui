@@ -2,22 +2,22 @@ import React from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import { makeStyles } from '@material-ui/core/styles'
+import { useTheme } from '@mui/styles'
+import Box from '@mui/material/Box'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import IconButton from '@mui/material/IconButton'
+import Typography from '@mui/material/Typography'
+import MuiLink from '@mui/material/Link'
 
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
-import IconButton from '@material-ui/core/IconButton'
-import Typography from '@material-ui/core/Typography'
-import MuiLink from '@material-ui/core/Link'
+import EventIcon from '@mui/icons-material/EventOutlined'
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
+import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined'
+import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined'
 
-import EventIcon from '@material-ui/icons/EventOutlined'
-import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
-import CheckCircleOutlineOutlinedIcon from '@material-ui/icons/CheckCircleOutlineOutlined'
-import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined'
-
-const Campaign = (props) => {
+const CampaignItem = (props) => {
   const { campaignId, name, active } = props
-  const classes = useStyles()
+  const theme = useTheme()
   const router = useRouter()
 
   const handleScheduleClick = (event) => {
@@ -31,81 +31,61 @@ const Campaign = (props) => {
   }
 
   return (
-    <>
-      <Card className={classes.root} elevation={0}>
-        <div className={classes.details}>
-          <CardContent className={classes.content}>
-            <Typography variant="subtitle1" color="textSecondary">
-              {`#${campaignId}`}
-            </Typography>
-            <Link href={`/campaign/${campaignId}`} passHref>
-              <MuiLink color="inherit">
-                <Typography
-                  component="h5"
-                  variant="h5"
-                  className={classes.title}>
-                  {name}
-                </Typography>
-              </MuiLink>
-            </Link>
-          </CardContent>
-          <div className={classes.controlsWrapper}>
-            <div className={classes.controls}>
-              <IconButton
-                onClick={handleDetailClick}
-                aria-label="technical details">
-                <SettingsOutlinedIcon />
-              </IconButton>
-              <IconButton onClick={handleScheduleClick} aria-label="schedule">
-                <EventIcon />
-              </IconButton>
-            </div>
-            <div className={classes.active}>
-              {active ? (
-                <CheckCircleOutlineOutlinedIcon color="primary" />
-              ) : (
-                <HighlightOffOutlinedIcon color="error" />
-              )}
-            </div>
-          </div>
-        </div>
-      </Card>
-    </>
+    <Card elevation={0} sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+        <CardContent sx={{ flex: '1 0 auto' }}>
+          <Typography variant="subtitle1" color="textSecondary">
+            {`#${campaignId}`}
+          </Typography>
+          <Link href={`/campaign/${campaignId}`} passHref>
+            <MuiLink
+              color="inherit"
+              sx={{
+                textDecoration: 'none',
+                '&:hover': { textDecoration: 'underline' }
+              }}>
+              <Typography
+                component="h5"
+                variant="h5"
+                sx={{
+                  fontWeight: 400,
+                  minHeight: '64px',
+                  fontSize: '1.5rem'
+                }}>
+                {name}
+              </Typography>
+            </MuiLink>
+          </Link>
+        </CardContent>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            paddingLeft: theme.spacing(1),
+            paddingRight: theme.spacing(2),
+            paddingBottom: theme.spacing(1)
+          }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <IconButton
+              onClick={handleDetailClick}
+              aria-label="technical details">
+              <SettingsOutlinedIcon />
+            </IconButton>
+            <IconButton onClick={handleScheduleClick} aria-label="schedule">
+              <EventIcon />
+            </IconButton>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {active ? (
+              <CheckCircleOutlineOutlinedIcon color="primary" />
+            ) : (
+              <HighlightOffOutlinedIcon color="error" />
+            )}
+          </Box>
+        </Box>
+      </Box>
+    </Card>
   )
 }
 
-export default Campaign
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex'
-  },
-  details: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%'
-  },
-  content: {
-    flex: '1 0 auto'
-  },
-  controlsWrapper: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(2),
-    paddingBottom: theme.spacing(1)
-  },
-  controls: {
-    display: 'flex',
-    alignItems: 'center'
-  },
-  active: {
-    display: 'flex',
-    alignItems: 'center'
-  },
-  title: {
-    fontFamily: 'Montserrat',
-    fontWeight: 500,
-    minHeight: '64px'
-  }
-}))
+export default CampaignItem

@@ -1,28 +1,28 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { Formik } from 'formik'
 import * as Yup from 'yup'
+import { signIn } from 'next-auth/client'
 
-import Avatar from '@material-ui/core/Avatar'
-import Box from '@material-ui/core/Box'
-import Button from '@material-ui/core/Button'
-import Checkbox from '@material-ui/core/Checkbox'
-import Container from '@material-ui/core/Container'
-import Paper from '@material-ui/core/Paper'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import FormHelperText from '@material-ui/core/FormHelperText'
-import Link from '@material-ui/core/Link'
-import TextField from '@material-ui/core/TextField'
-import Typography from '@material-ui/core/Typography'
-import Grid from '@material-ui/core/Grid'
+import Avatar from '@mui/material/Avatar'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Checkbox from '@mui/material/Checkbox'
+import Container from '@mui/material/Container'
+import Paper from '@mui/material/Paper'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import FormHelperText from '@mui/material/FormHelperText'
+import Link from '@mui/material/Link'
+import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
+import Grid from '@mui/material/Grid'
 
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 
-import { makeStyles } from '@material-ui/core'
-//import { useAuthState } from 'context/auth'
+import { useTheme } from '@mui/material/styles'
 
 const Login = (props) => {
-  const classes = useStyles()
+  const theme = useTheme()
 
   // const { user, login, isAuthenticated, isError, error } = useAuthState()
   const error = false
@@ -35,34 +35,47 @@ const Login = (props) => {
   }, [user, isAuthenticated, history])
 */
 
-  const handleLogin = (username, password) => {
-    return false
-  }
-
   return (
-    <Container component="main" maxWidth="xs" className={classes.root}>
-      <Paper className={classes.paper} elevation={0}>
-        <Avatar className={classes.avatar}>
+    <Container
+      component="main"
+      maxWidth="xs"
+      sx={{ height: '100%', paddingTop: theme.spacing(8) }}>
+      <Paper
+        sx={{
+          backgroundColor: '#fff',
+          padding: theme.spacing(4),
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+        elevation={0}>
+        <Avatar
+          sx={{
+            margin: theme.spacing(1),
+            backgroundColor: theme.palette.primary.main
+          }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography
+          component="h1"
+          variant="h5"
+          sx={{ fontFamily: 'Montserrat', fontWeight: 500 }}>
           Presentació
         </Typography>
         <Formik
-          initialValues={{ email: '', password: '' }}
+          initialValues={{ username: '', password: '' }}
           validationSchema={Yup.object().shape({
-            email: Yup.string()
-              .email('El email no és vàlid')
-              .required('El email és obligatori'),
+            username: Yup.string().required("L'usuari és obligatori"),
             password: Yup.string()
               .required('La password és obligatoria')
               .min(4, 'La password ha de tenir com a mínim 4 caràcters')
             // .matches(/(?=.*[0-9])/, 'La contraseña debe tener al menos un número')
           })}
           onSubmit={(values, { setSubmitting }) => {
-            const { email, password } = values
+            const { username, password } = values
             setSubmitting(true)
-            handleLogin(email, password)
+            signIn('credentials', { username, password })
               .then(() => {
                 setSubmitting(false)
               })
@@ -80,22 +93,25 @@ const Login = (props) => {
             handleSubmit,
             isSubmitting
           }) => (
-            <form className={classes.form} onSubmit={handleSubmit} noValidate>
+            <Box
+              variant="form"
+              sx={{ width: '100%', marginTop: theme.spacing(1) }}
+              onSubmit={handleSubmit}
+              noValidate>
               <TextField
                 required
                 fullWidth
                 autoFocus
-                id="email"
-                label="Email"
-                name="email"
+                id="username"
+                label="Usuari"
+                name="username"
                 variant="outlined"
                 margin="normal"
-                autoComplete="email"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.email}
-                error={(errors.email && touched.email) || error}
-                helperText={touched.email && errors.email}
+                value={values.username}
+                error={(errors.username && touched.username) || error}
+                helperText={touched.username && errors.username}
               />
               <TextField
                 required
@@ -125,26 +141,25 @@ const Login = (props) => {
               <Button
                 type="submit"
                 fullWidth
+                onClick={handleSubmit}
                 variant="contained"
                 color="primary"
-                className={classes.submit}
+                sx={{ margin: theme.spacing(2, 0, 3), color: '#fff' }}
                 disabled={isSubmitting}>
                 Entrar
               </Button>
               <Grid container>
                 <Grid item xs={12} sm={6}>
-                  <Link href="#" variant="body2">
+                  <Link
+                    href="#"
+                    variant="body2"
+                    sx={{ fontWeight: 500, textDecoration: 'none' }}>
                     He oblidat la password
-                  </Link>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Link href="/auth/register" variant="body2">
-                    No tinc compte
                   </Link>
                 </Grid>
               </Grid>
               <Box mt={2}></Box>
-            </form>
+            </Box>
           )}
         </Formik>
       </Paper>
@@ -153,30 +168,3 @@ const Login = (props) => {
 }
 
 export default Login
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    height: '100%',
-    paddingTop: theme.spacing(8)
-  },
-  paper: {
-    backgroundColor: '#fff',
-    padding: theme.spacing(4),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.primary.main
-  },
-  form: {
-    width: '100%',
-    marginTop: theme.spacing(1)
-  },
-  submit: {
-    margin: theme.spacing(2, 0, 3),
-    color: '#fff'
-  }
-}))
