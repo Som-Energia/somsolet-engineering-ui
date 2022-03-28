@@ -20,7 +20,7 @@ const providers = [
       // You can also use the `req` object to obtain additional parameters
       // (i.e., the request IP address)
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SOMSOLET_API}/api-auth/login/`,
+        `${process.env.NEXT_PUBLIC_SOMSOLET_API}/api/token/`,
         {
           method: 'POST',
           body: JSON.stringify(credentials),
