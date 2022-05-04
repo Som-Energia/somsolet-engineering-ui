@@ -1,6 +1,7 @@
 import * as CONSTANTS from "./../constants";
 import PATHS from "../paths";
 import { fetchCampaigns } from "./campaigns";
+import jwt_decode from "jwt-decode";
 import {
   getCookie,
   getLocalStorage,
@@ -11,19 +12,27 @@ import {
   setLocalStorage,
 } from "../utils/storage";
 
-export const checkUserIsLogged = (token) => (dispatch) => {
-  token =
-    token ||
-    getCookie(CONSTANTS.TOKEN_KEY) ||
-    getLocalStorage(CONSTANTS.TOKEN_KEY);
+export const checkUserIsLogged = () => (dispatch) => {
+  const token =
+    getCookie(CONSTANTS.TOKEN_KEY) || getLocalStorage(CONSTANTS.TOKEN_KEY);
 
   if (token) {
     dispatch({ type: "SAVE_TOKEN", payload: token });
+    dispatch(decodeUserToken(token));
     dispatch(fetchUser());
-    dispatch(fetchCampaigns({ token }));
+    dispatch(fetchCampaigns());
   } else {
     dispatch({ type: "RESET_USER" });
   }
+};
+
+export const decodeUserToken = (token) => {
+  const { email, username, name, user_id } = jwt_decode(token);
+
+  return {
+    type: "DECODE_USER_TOKEN",
+    payload: { email, username, name, user_id },
+  };
 };
 
 export const setToken = ({ token, remember = false }) => {
@@ -40,14 +49,14 @@ export const setToken = ({ token, remember = false }) => {
 };
 
 export const signIn =
-  ({ username, password, remember }) =>
+  ({ username, password, remember }, navigate) =>
   async (dispatch) => {
     const action = await dispatch(fetchSignIn({ username, password }));
 
     if (action.type === "SIGN_IN_SUCCESS" && !action.error) {
       const { access: token } = action.payload.data;
       dispatch(setToken({ token, remember }));
-      window.location.href = PATHS.CAMPAIGNS;
+      navigate(PATHS.CAMPAIGNS);
     } else if (action.type === "SIGN_IN_FAIL") {
       const error = action.error.meta;
       console.error(error);
@@ -82,7 +91,6 @@ export const fetchSignIn = ({ username, password }) => ({
 
 export const signOut = () => async (dispatch) => {
   dispatch(resetUser());
-  dispatch(logOut());
 
   window.location.href = "/signin";
 };
@@ -96,8 +104,3 @@ export const resetUser = () => {
     type: "RESET_USER",
   };
 };
-
-export const logOut = () => ({
-  type: "LOG_OUT",
-  payload: null,
-});

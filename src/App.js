@@ -36,7 +36,7 @@ const App = () => {
   useEffect(() => {
     dispatch(checkUserIsLogged());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     language && i18n.changeLanguage(language);

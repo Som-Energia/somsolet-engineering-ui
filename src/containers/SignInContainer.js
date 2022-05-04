@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux";
 import { signIn } from "../actions/auth";
 import SignInForm from "../components/SignInForm";
 import styled from "styled-components";
+import { useNavigate } from "react-router";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -12,8 +13,9 @@ const StyledContainer = styled.div`
 
 const SignInContainer = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleSignIn = (data) => dispatch(signIn(data));
+  const handleSignIn = (data) => dispatch(signIn(data, navigate));
 
   return (
     <StyledContainer>

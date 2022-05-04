@@ -19,16 +19,20 @@ const reducer = (state = initialState, { type, payload, ...action }) => {
       return {
         ...state,
         isLoading: false,
-        user: payload.data,
+        user: { ...state.user, ...payload.data },
         language: payload.data.language,
       };
     case "SIGN_IN_SUCCESS":
-      console.log(JSON.stringify(payload.data));
       return {
         ...state,
         isLoading: false,
         token: payload.data.access,
         isAuthenticated: true,
+      };
+    case "DECODE_USER_TOKEN":
+      return {
+        ...state,
+        user: payload,
       };
     case "FETCH_USER_FAIL":
     case "SIGN_IN_FAIL":
@@ -44,7 +48,6 @@ const reducer = (state = initialState, { type, payload, ...action }) => {
         isAuthenticated: true,
         token: payload,
       };
-    case "LOG_OUT":
     case "RESET_USER":
       return {
         ...initialState,
