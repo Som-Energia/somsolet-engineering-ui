@@ -19,10 +19,10 @@ export const checkUserIsLogged = (token) => (dispatch) => {
 
   if (token) {
     dispatch({ type: "SAVE_TOKEN", payload: token });
+    dispatch(fetchUser());
     dispatch(fetchCampaigns({ token }));
   } else {
     dispatch({ type: "RESET_USER" });
-    window.location.href(PATHS.SIGNIN);
   }
 };
 
@@ -55,6 +55,16 @@ export const signIn =
 
     return action;
   };
+
+export const fetchUser = () => ({
+  type: "FETCH_USER",
+  payload: {
+    request: {
+      method: "GET",
+      url: "https://run.mocky.io/v3/9444e1ca-c196-4455-962a-07637212e472",
+    },
+  },
+});
 
 export const fetchSignIn = ({ username, password }) => ({
   type: "SIGN_IN",

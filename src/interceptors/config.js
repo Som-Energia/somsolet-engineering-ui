@@ -19,6 +19,7 @@ const middlewareConfig = {
           return config;
         },
         error: function ({ getState, dispatch, getSourceAction }, error) {
+          console.error(error);
           return Promise.reject(error);
         },
       },

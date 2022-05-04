@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { getCampaign, updateSort, fetchProjects } from "../actions/campaigns";
 import { DataGrid } from "@mui/x-data-grid";
 import ProjectsFilters from "../components/ProjectsFilters";
+
 const StyledContainer = styled.div``;
 
 const StyledTableContainer = styled.div`
@@ -35,6 +36,8 @@ const Campaign = () => {
     dispatch(updateSort({ ...filtering, ...value }));
   };
 
+  const RenderCell = (props) => console.log(props);
+
   return (
     !isLoading &&
     campaign && (
@@ -53,6 +56,7 @@ const Campaign = () => {
                 columns={projects.columns}
                 pageSize={5}
                 rowsPerPageOptions={[5]}
+                components={{ cell: (props) => RenderCell(props) }}
               />
             </>
           )}

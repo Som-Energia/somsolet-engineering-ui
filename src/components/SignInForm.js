@@ -2,6 +2,7 @@ import { useFormik } from "formik";
 import styled from "styled-components";
 import TextField from "@mui/material/TextField";
 import { Button, Checkbox, FormControlLabel } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const StyledCard = styled.div`
   background-color: white;
@@ -23,6 +24,8 @@ const StyledHeading = styled.h3`
 `;
 
 const SignInForm = ({ handleSignIn = () => {} }) => {
+  const { t } = useTranslation();
+
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -46,7 +49,7 @@ const SignInForm = ({ handleSignIn = () => {} }) => {
 
   return (
     <StyledCard>
-      <StyledHeading>Iniciar sesión</StyledHeading>
+      <StyledHeading>{t("SIGNIN")}</StyledHeading>
       <form onSubmit={handleSubmit}>
         <TextField
           required

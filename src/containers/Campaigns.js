@@ -20,13 +20,16 @@ const Campaigns = () => {
   return (
     !isLoading &&
     campaigns && (
-      <StyledList>
-        {campaigns.map((data) => (
-          <StyledListItem key={data.campaignId}>
-            <CampaignCard data={data} />
-          </StyledListItem>
-        ))}
-      </StyledList>
+      <>
+        <h2>Campanyes actives</h2>
+        <StyledList>
+          {campaigns.map((data) => (
+            <StyledListItem key={data.campaignId}>
+              <CampaignCard data={data} />
+            </StyledListItem>
+          ))}
+        </StyledList>
+      </>
     )
   );
 };

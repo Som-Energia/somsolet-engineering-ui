@@ -1,3 +1,16 @@
+export const fetchProject = (id) => {
+  return {
+    type: "FETCH_PROJECT",
+    payload: {
+      request: {
+        method: "GET",
+        url: `/technical_details/`,
+        params: { projectId: id },
+      },
+    },
+  };
+};
+
 export const fetchCampaigns = () => {
   return {
     type: "FETCH_CAMPAIGNS",

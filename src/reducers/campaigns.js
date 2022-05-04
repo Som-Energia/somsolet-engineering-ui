@@ -1,3 +1,5 @@
+import PATHS from "../paths";
+
 export const initialState = {
   isLoading: false,
   error: null,
@@ -5,6 +7,7 @@ export const initialState = {
   campaign: null,
   projects: null,
   filtering: null,
+  project: null,
 };
 
 const reducer = (state = initialState, { type, payload, ...action }) => {
@@ -14,12 +17,19 @@ const reducer = (state = initialState, { type, payload, ...action }) => {
         ...state,
         filtering: { ...state.filtering, ...payload },
       };
+    case "FETCH_PROJECT":
     case "FETCH_PROJECTS":
     case "FETCH_CAMPAIGNS":
     case "FETCH_CAMPAIGN":
       return {
         ...state,
         isLoading: true,
+      };
+    case "FETCH_PROJECT_SUCCESS":
+      return {
+        ...state,
+        isLoading: false,
+        project: payload.data[0],
       };
     case "FETCH_PROJECTS_SUCCESS":
       return {
@@ -40,6 +50,7 @@ const reducer = (state = initialState, { type, payload, ...action }) => {
         isLoading: false,
         campaign: payload.data,
       };
+    case "FETCH_PROJECT_FAIL":
     case "FETCH_CAMPAIGNS_FAIL":
     case "FETCH_CAMPAIGN_FAIL":
     case "FETCH_PROJECTS_FAIL":
@@ -64,6 +75,14 @@ const transformProjectsToTable = (data) => {
       { field: "name", headerName: "Name", width: 130 },
       { field: "status", headerName: "Status", width: 130 },
       { field: "warning", headerName: "Warning", width: 100 },
+      {
+        field: "details",
+        headerName: "Details",
+        width: 100,
+        renderCell: ({ value }) => (
+          <a href={`${PATHS.PROJECT}/${value}`}>Tech detail</a>
+        ),
+      },
     ],
     rows: data.map(({ description }) => {
       return {
@@ -72,6 +91,7 @@ const transformProjectsToTable = (data) => {
         name: description.registeredPerson.name,
         status: description.stageId,
         warning: description.warning,
+        details: description.projectId,
       };
     }),
   };
