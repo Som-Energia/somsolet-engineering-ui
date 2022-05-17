@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { getCampaign, updateSort, fetchProjects } from "../actions/campaigns";
 import { DataGrid } from "@mui/x-data-grid";
 import ProjectsFilters from "../components/ProjectsFilters";
+import Loading from "../components/Loading";
 
 const StyledContainer = styled.div``;
 
@@ -12,6 +13,10 @@ const StyledTableContainer = styled.div`
   height: 400px;
   width: 100%;
   background-color: white;
+`;
+
+const StyledHeader = styled.h2`
+  font-weight: normal;
 `;
 
 const Campaign = () => {
@@ -38,31 +43,30 @@ const Campaign = () => {
 
   const RenderCell = (props) => console.log(props);
 
-  return (
-    !isLoading &&
-    campaign && (
-      <StyledContainer>
-        <h2>{campaign.name}</h2>
-        <StyledTableContainer>
-          {projects?.columns && projects?.rows && (
-            <>
-              <ProjectsFilters
-                data={filters}
-                onFilterChange={handleFilter}
-                filtering={filtering}
-              />
-              <DataGrid
-                rows={projects.rows}
-                columns={projects.columns}
-                pageSize={5}
-                rowsPerPageOptions={[5]}
-                components={{ cell: (props) => RenderCell(props) }}
-              />
-            </>
-          )}
-        </StyledTableContainer>
-      </StyledContainer>
-    )
+  return !isLoading && campaign ? (
+    <StyledContainer>
+      <StyledHeader>{campaign.name}</StyledHeader>
+      <StyledTableContainer>
+        {projects?.columns && projects?.rows && (
+          <>
+            <ProjectsFilters
+              data={filters}
+              onFilterChange={handleFilter}
+              filtering={filtering}
+            />
+            <DataGrid
+              rows={projects.rows}
+              columns={projects.columns}
+              pageSize={5}
+              rowsPerPageOptions={[5]}
+              components={{ cell: (props) => RenderCell(props) }}
+            />
+          </>
+        )}
+      </StyledTableContainer>
+    </StyledContainer>
+  ) : (
+    <Loading />
   );
 };
 

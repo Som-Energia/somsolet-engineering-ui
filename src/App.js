@@ -21,7 +21,7 @@ import { useTranslation } from "react-i18next";
 
 const StyledContainer = styled.div`
   background-color: #f2f2f2;
-  height: calc(100vh - 138px);
+  height: calc(100vh - 137px);
   padding: ${({ theme }) => theme.spacings.small3};
   overflow: auto;
 `;

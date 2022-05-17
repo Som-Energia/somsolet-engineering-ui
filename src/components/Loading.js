@@ -1,22 +1,17 @@
-import { makeStyles } from "@material-ui/core/styles";
-
+import styled from "styled-components";
 import loading from "../assets/images/loading.svg";
 
-const useStyles = makeStyles((theme) => ({
-  loading: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-}));
+const StyledContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const Loading = () => {
-  const classes = useStyles();
-
   return (
-    <div className={classes.loading}>
+    <StyledContainer>
       <img alt="Loading..." src={loading} />
-    </div>
+    </StyledContainer>
   );
 };
 

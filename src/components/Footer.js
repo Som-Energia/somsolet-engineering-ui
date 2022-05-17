@@ -5,6 +5,8 @@ const StyledFooter = styled.footer`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background-color: ${({ theme }) => theme.color.charcoal700};
+  color: white;
 `;
 const Footer = () => {
   return (

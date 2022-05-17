@@ -1,70 +1,55 @@
-# Getting Started with Create React App
+# Docs
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Arquitectura
 
-## Available Scripts
+La arquitectura del proyecto se separa entre las carpetas _containers_ y _components_.
 
-In the project directory, you can run:
+La idea es que los _containers_ contengan las rutas/páginas de la aplicación y que contengan la mayor parte de lógica de estas como por ejemplo _dispatches_, manejadores de eventos, pequeñas transformaciones, etc.
 
-### `npm start`
+Por otras partes la carpeta de _components_ es contener todos aquellos componentes que se encargan de renderizar la información, sin ningún tipo de lógica.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Redux
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Este proyecto contiene _redux_ para manejar el estado global de la aplicación. Está separado en la carpeta _actions_, _reducers_ y el fichero _store.js_.
 
-### `npm test`
+El archivo _store.js_ contiene todos los _reducers_ de la aplicación donde se almacena todo. En este caso existe un estado global para la parte de autentificación y otra con los datos de las campañas.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+En la carpeta _actions_ guardamos los métodos que disparan eventos mediante el _hook_ _dispatch_, estos pueden ser llamadas al api o cambios que queramos guardar dentro de nuestro estado global de la aplicación.
 
-### `npm run build`
+En el caso de llamadas al api, los _request_ devuelven un _payload_ que será interceptado en el fichero _interceptors/config.js_ donde se alimentará el estado de la llamada mediante _\_SUCCESS_ o _\_FAIL_ para detectar si la llamada realizada ha sido un éxito o un fallo. Esta estrategia permite poder manejar el estado de cada llamada añadiendo lógicas asíncronas de forma sencilla.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+La forma que tenemos de conectar los _actions_ y los _reducers_ es mediante la clave _type_ que definimos en _action_ y que coincide en el _reducer_.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Una vez tenemos definidos los _actions_ y el _reducer_ que maneja el estado, utilizamos el _hook_ `useSelector()` para consultar el campo que queremos dentro de nuestro _container_.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Es posible que nos surja la duda de si realizar la consulta desde los componentes o desde los _containers_, en este caso yo prefiero hacer toda esa lógica en los _containers_ y pasar los datos hacia los hijos para intentar tener la mayor lógica posible en los contendores.
 
-### `npm run eject`
+### Transformaciones de llamadas
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+En algunos casos, para intentar que los datos lleguen al contendor de la forma más sencilla posible se pueden utilizar funciones o métodos de transformación para que, antes de guardarlos en el estado de la aplicación, tengan una estructura más sencilla de leer.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Es el caso que tenemos en el fichero `reducers/campaigns.js` donde el método `transformProjectsToTable` recibe la llamada del api y lo formatea para que tenga la estructura que demanda la tabla del detalle de campaña.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+En un caso ideal, el api debería de devolver la mejor estructura posible para el _frontend_, pero como digo es un caso bastante común que necesitemos un formato que nos facilite el renderizado.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Si bien esta transformación la podríamos hacer en los contenedores creo que esta estrategia nos puede ayudar a que los contenedores queden lo más limpios posibles.
 
-## Learn More
+## Estilos
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Los estilos de la aplicación estan realizados con el _styled-components_ de forma global existe un tema definido en la carpeta _theme_ y que se puede usar dentro de cualquier componente estilado, pudiendo añadir lógicas de javascript dentro de cada uno de ellos mediante _props_.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+A nivel de arquitectura los estilos se mantienen dentro del mismo archivo, sería posible separarlos aunque prefiero que todo esté en el mismo fichero para que el mantenimiento sea más sencillo.
 
-### Code Splitting
+Si un archivo se hace demasiado grande y crece en líneas lo ideal sería hacer una separación para intentar que no crezcan demasiado.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Traducciones
 
-### Analyzing the Bundle Size
+Las traducciones se hacen de la misma forma que hacemos en los otros proyectos. En ese caso que querido mantener la misma metodolgía
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+# Instalar proyecto
 
-### Making a Progressive Web App
+Para instalar el proyecto podemos hacerlo mediante `npm install` o `yarn install`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+# Iniciar proyecto
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Para iniciar el proyecto podemos hacerlo mediante `npm start` o `yarn start`

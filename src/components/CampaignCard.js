@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import PATHS from "../paths";
 
 const StyledCard = styled.article`
-  padding: ${({ theme }) => theme.spacings.small3};
+  padding: ${({ theme }) => theme.spacings.medium1};
   font-size: 16px;
   color: ${({ theme }) => theme.color.charcoal800};
   position: relative;
@@ -28,8 +28,11 @@ const StyledCard = styled.article`
   }
 `;
 const StyledText = styled.p`
-  text-align: right;
+  text-align: left;
   font-size: 14px;
+  font-weight: bold;
+  color: ${({ theme, isActive }) => !isActive && theme.color.charcoal600};
+  margin: 0;
 `;
 
 const StyledStatus = styled.p`
@@ -49,11 +52,9 @@ const CampaignCard = ({ data }) => {
     <StyledCard isActive={active}>
       {active ? <Link to={`${PATHS.CAMPAIGN}/${id}`}></Link> : null}
       <h2>{name}</h2>
-      <StyledStatus>
-        Status: <strong>{active ? "activa" : "no activa"}</strong>
-      </StyledStatus>
       <StyledText>
-        {geographicalRegion}, {autonomousCommunity}
+        {geographicalRegion && `${geographicalRegion}, `}
+        {autonomousCommunity}
       </StyledText>
     </StyledCard>
   );
