@@ -10,11 +10,6 @@ const StyledList = styled.ul`
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   grid-gap: ${({ theme }) => theme.spacings.small3};
 `;
-const StyledListItem = styled.li`
-  background-color: white;
-  border-radius: 4px;
-  border: 1px solid rgba(224, 224, 224, 1);
-`;
 
 const StyledHeader = styled.h2`
   font-weight: normal;
@@ -30,9 +25,9 @@ const Campaigns = () => {
       <StyledHeader>{t("CAMPAIGNS_TITLE")}</StyledHeader>
       <StyledList>
         {campaigns.map((data) => (
-          <StyledListItem key={data.campaignId}>
+          <li key={data.campaignId}>
             <CampaignCard data={data} />
-          </StyledListItem>
+          </li>
         ))}
       </StyledList>
     </>
