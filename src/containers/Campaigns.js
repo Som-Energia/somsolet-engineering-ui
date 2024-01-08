@@ -26,7 +26,7 @@ const Campaigns = () => {
       <StyledList>
         {campaigns.map((data) => (
           <li key={data.campaignId}>
-            <CampaignCard data={data} />
+            <CampaignCard data={data}/>
           </li>
         ))}
       </StyledList>

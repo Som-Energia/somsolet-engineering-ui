@@ -5,12 +5,13 @@ import { useEffect } from "react";
 import { getCampaign, updateSort, fetchProjects } from "../actions/campaigns";
 import { DataGrid } from "@mui/x-data-grid";
 import ProjectsFilters from "../components/ProjectsFilters";
+import ProjectListItem from "../containers/ProjectListItem";
 import Loading from "../components/Loading";
 
 const StyledContainer = styled.div``;
 
 const StyledTableContainer = styled.div`
-  height: 400px;
+  height: 100%;
   width: 100%;
   background-color: white;
 `;
@@ -41,28 +42,13 @@ const Campaign = () => {
     dispatch(updateSort({ ...filtering, ...value }));
   };
 
-  const RenderCell = (props) => console.log(props);
-
   return !isLoading && campaign ? (
     <StyledContainer>
       <StyledHeader>{campaign.name}</StyledHeader>
       <StyledTableContainer>
-        {projects?.columns && projects?.rows && (
-          <>
-            <ProjectsFilters
-              data={filters}
-              onFilterChange={handleFilter}
-              filtering={filtering}
-            />
-            <DataGrid
-              rows={projects.rows}
-              columns={projects.columns}
-              pageSize={5}
-              rowsPerPageOptions={[5]}
-              components={{ cell: (props) => RenderCell(props) }}
-            />
-          </>
-        )}
+        {projects?.rows.map((project) => (
+          <ProjectListItem key={project.id} project={project}></ProjectListItem>
+        ))}
       </StyledTableContainer>
     </StyledContainer>
   ) : (

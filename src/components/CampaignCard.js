@@ -52,9 +52,12 @@ const CampaignCard = ({ data }) => {
     name,
     active,
     region: { geographicalRegion, autonomousCommunity },
+    installationsStatus: { inscriptions, completed },
   } = data
 
-  const nAlerts = 3
+  console.log('data', data)
+
+  const nAlerts = data.warning?? 1
 
   return (
     <Card isActive={active} sx={{height:"100%"}}>
@@ -78,6 +81,10 @@ const CampaignCard = ({ data }) => {
         <StyledText>
           {geographicalRegion && `${geographicalRegion}, `}
           {autonomousCommunity}
+        </StyledText>
+        <StyledText>
+          {inscriptions}
+          {completed}
         </StyledText>
       </CardContent>
       </CardActionArea>
