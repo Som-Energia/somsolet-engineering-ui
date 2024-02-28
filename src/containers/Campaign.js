@@ -10,6 +10,8 @@ import Loading from "../components/Loading";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
+import InputAdornment from '@mui/material/InputAdornment';
+import SearchIcon from '@mui/icons-material/Search';
 
 const StyledContainer = styled.div``;
 
@@ -29,6 +31,7 @@ const Campaign = () => {
     (state) => state.campaigns
   );
   const [selectedState, setSelectedState] = useState("all");
+  const [filterText, setFilterText] = useState("");
 
   const { id } = useParams();
 
@@ -95,13 +98,21 @@ const Campaign = () => {
       label: "Signatura Contracte Clau en mà",
     },
   ];
+  function matchesFilterText(project) {
+    if (filterText === "") return true;
+    if (project.name.toLowerCase().includes(filterText.toLowerCase()))
+      return true;
+    // cosas de la persona
+    return false;
+  }
 
   return !isLoading && campaign ? (
     <StyledContainer>
       <StyledHeader>{campaign.name}</StyledHeader>
-      <Box>
+      <Box sx={{"display":"flex", "gap": "1rem"}}>
         <TextField
-          id="outlined-select-currency"
+          sx={{"flex":0.5}}
+          id="outlined-select-status"
           select
           label="Status"
           value={selectedState}
@@ -116,12 +127,35 @@ const Campaign = () => {
             </MenuItem>
           ))}
         </TextField>
+        <TextField
+          sx={{"flex":1}}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          id="filter-text"
+          label="Nom, email, DNI, Codi Projecte, Color Preferit, Signe del Zodiac..."
+          variant="outlined"
+          value={filterText}
+          onChange={(event) => {
+            setFilterText(event.target.value);
+          }}
+        />
       </Box>
       <StyledTableContainer>
-        {projects?.rows.map((project) => (
-          ['all', project?.status].includes(selectedState) &&
-          <ProjectListItem key={project.id} project={project}></ProjectListItem>
-        ))}
+        {projects?.rows.map(
+          (project) =>
+            ["all", project.status].includes(selectedState) &&
+            matchesFilterText(project) && (
+              <ProjectListItem
+                key={project.id}
+                project={project}
+              ></ProjectListItem>
+            )
+        )}
       </StyledTableContainer>
     </StyledContainer>
   ) : (
