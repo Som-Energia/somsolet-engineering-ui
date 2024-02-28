@@ -88,7 +88,9 @@ const transformProjectsToTable = (data) => {
       return {
         id: description.projectId,
         installation: description.campaignName,
-        name: description.registeredPerson.name,
+        person_name: description.registeredPerson.name,
+        person_email: description.registeredPerson.email,
+       // person_nif: description.registeredPerson.nif,
         status: description.stageId,
         warning: description.warning,
         details: description.projectId,
