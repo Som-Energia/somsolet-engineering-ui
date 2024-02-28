@@ -119,6 +119,7 @@ const Campaign = () => {
       </Box>
       <StyledTableContainer>
         {projects?.rows.map((project) => (
+          ['all', project?.status].includes(selectedState) &&
           <ProjectListItem key={project.id} project={project}></ProjectListItem>
         ))}
       </StyledTableContainer>
